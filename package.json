@@ -1,0 +1,36 @@
+{
+  "name": "decogram",
+  "version": "1.0.0",
+  "description": "Meta-based Telegram Bot Building",
+  "main": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "preinstall": "check-engines"
+  },
+  "license": "MIT",
+  "type": "commonjs",
+  "private": false,
+  "author": {
+    "name": "JubaDev michaelres1332@gmail.com"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.10.0",
+    "express": "^5.1.0",
+    "pino": "^9.7.0",
+    "pino-pretty": "^13.0.0",
+    "reflect-metadata": "^0.2.2",
+    "telegraf": "^4.16.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "check-engines": "^1.6.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
