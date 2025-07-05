@@ -1,6 +1,5 @@
 // Export core types with alias if necessary
 export * from "./core/types/types";
-export * from "./core/types/types";
 
 // Export strategy modules
 export * from "./core/strategy/polling";

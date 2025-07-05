@@ -4,6 +4,9 @@
     "target": "esnext",
     "module": "node16",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "declaration": true,         
+    "emitDeclarationOnly": true, 
+    "declarationDir": "dist"
   }
 }
