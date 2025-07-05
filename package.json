@@ -1,6 +1,6 @@
 {
-  "name": "decogram",
-  "version": "1.0.1",
+  "name": "metagram",
+  "version": "1.0.0",
   "description": "Meta-based Telegram Bot Programming",
   "main": "dist/index.js",
   "files": [
