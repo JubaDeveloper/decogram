@@ -7,8 +7,7 @@
     "dist"
   ],
   "scripts": {
-    "BUILD": "yarn tsc",
-    "preinstall": "check-engines"
+    "BUILD": "yarn tsc"
   },
   "license": "MIT",
   "type": "commonjs",
