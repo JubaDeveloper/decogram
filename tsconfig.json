@@ -5,6 +5,9 @@
     "module": "node16",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "declaration": true
+    "declaration": true,
+    "paths": {
+      "metagram@core/*": ["./src/core/*"]
+    }
   }
 }

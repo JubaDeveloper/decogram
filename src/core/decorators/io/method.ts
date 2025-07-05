@@ -1,7 +1,8 @@
-import { LoggerFactory } from "../../logger/logger.factory";
 import { defineMethodListenerMetadatas } from "../../metadata/definers/defineMethodListenerMetadata";
 import { onMessageMetaKey, onCallbackMetaKey } from "../../metadata/keys";
 import { ContextPredicate, TgMessageContext, TgCallbackQueryContext } from "../../types/types";
+import { LoggerFactory } from "../../logger/logger.factory";
+
 
 const logger = LoggerFactory().getDefaultLogger()
 

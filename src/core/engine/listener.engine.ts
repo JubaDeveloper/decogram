@@ -1,12 +1,12 @@
 // FULL FILE — WITH COMPLETE LOGGING ENHANCEMENTS
 import "reflect-metadata";
 import { Context, Telegraf } from "telegraf";
-import { SingletonService } from "../../singleton/singleton";
+import { LoggerFactory } from "metagram@core/logger/logger.factory";
+import { SingletonService } from "metagram@core/singleton/singleton";
+import { registerWebhookUpdateListenerStrategy } from "metagram@core/strategy/webhook";
 import { Logger } from "pino";
-import { LoggerFactory } from "../../logger/logger.factory";
-import { registerWebhookUpdateListenerStrategy } from "../../strategy/webhook";
-import { SessionContextWithChildren, WebhookFetchStrategy, PollingFetchStrategy, ContextPredicate, TgCallbackQueryContext, TgMessageContext, Constructor, ErrorHandler, ISessionContext } from "../../types/types";
-import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, onMessageMetaKey, onCallbackMetaKey, classErrorHandlerKey, methodErrorHandlerKey } from "../../metadata/keys";
+import { TgMessageContext, TgCallbackQueryContext, SessionContextWithChildren, ISessionContext, ErrorHandler, Constructor, ContextPredicate, WebhookFetchStrategy, PollingFetchStrategy } from "metagram@core/types/types";
+import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, classErrorHandlerKey, methodErrorHandlerKey, onMessageMetaKey, onCallbackMetaKey } from "metagram@core/metadata/keys";
 
 let logger = LoggerFactory().getDefaultLogger()
 

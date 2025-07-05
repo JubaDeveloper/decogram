@@ -1,14 +1,28 @@
 {
   "name": "metagram",
-  "version": "1.0.6",
+  "version": "1.0.9",
   "description": "Meta-based Telegram Bot Programming",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "exports": {
+    "./core/bootstrap": "./dist/core/bootstrap/bootstrap.js",
+    "./core/decorators/io/class": "./dist/core/decorators/io/class.js",
+    "./core/decorators/io/method": "./dist/core/decorators/io/method.js",
+    "./core/decorators/io/parameter": "./dist/core/decorators/io/parameter.js",
+    "./core/decorators/io/error": "./dist/core/decorators/io/error.js",
+    "./core/decorators/iot/service": "./dist/core/decorators/iot/service.js",
+    "./core/decorators/iot/autowired": "./dist/core/decorators/iot/autowired.js",
+    "./core/telegram/engine": "./dist/core/telegram/engine/listener.engine.js",
+    "./core/singleton": "./dist/core/singleton/singleton.js",
+    "./core/strategy/polling": "./dist/core/strategy/polling.js",
+    "./core/strategy/webhook": "./dist/core/strategy/webhook.js",
+    "./core/strategy/engine/listener": "./dist/core/engine/listener.engine.js",
+    "./core/logger": "./dist/core/logger/logger.factory.js",
+    "./core/types": "./dist/core/types/types.js"
+  },
   "files": [
     "dist"
   ],
   "scripts": {
-    "BUILD": "yarn tsc"
+    "build": "yarn tsc"
   },
   "license": "MIT",
   "type": "commonjs",

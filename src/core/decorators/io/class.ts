@@ -1,7 +1,8 @@
-import { LoggerFactory } from "../../logger/logger.factory";
-import { registerBotAndBootstrap } from "../../telegram/mounting/mounting";
+
 import { Constructor, SessionContextConstructor, Master } from "../../types/types";
+import { LoggerFactory } from "../../logger/logger.factory";
 import { Service } from "../iot/service";
+import { registerBotAndBootstrap } from "metagram@core/engine/listener.engine";
 
 export const Handler = <T extends Constructor>(target: T): T => Service(target);
 
