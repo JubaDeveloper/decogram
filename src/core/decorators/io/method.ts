@@ -7,14 +7,14 @@ const logger = LoggerFactory().getDefaultLogger()
 
 export const OnMessage = (predicates: ContextPredicate<TgMessageContext>[] = []): MethodDecorator => {
     logger.trace(`[OnMessage Decorator] predicates.length=${predicates.length}`);
-    return (target, propKey) => {
+    return (target, propKey, _descriptor) => {
         defineMethodListenerMetadatas({ predicates, target, propKey, listenerMetaKey: onMessageMetaKey });
     };
 };
 
 export const OnCallbackQuery = (predicates: ContextPredicate<TgCallbackQueryContext>[] = []): MethodDecorator => {
     logger.trace(`[OnCallbackQuery Decorator] predicates.length=${predicates.length}`);
-    return (target, propKey) => {
+    return (target, propKey, _descriptor) => {
         defineMethodListenerMetadatas({ predicates, target, propKey, listenerMetaKey: onCallbackMetaKey });
     };
 };
