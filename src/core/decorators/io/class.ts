@@ -4,6 +4,7 @@ import { LoggerFactory } from "../../logger/logger.factory";
 import { Service } from "../iot/service";
 import { registerBotAndBootstrap } from "metagram@core/engine/listener.engine";
 import { handlerMiddlewaresKeySymbol } from "metagram@core/metadata/keys";
+import { SingletonService } from "metagram@core/singleton/singleton";
 
 export const Handler = (data: HandlerData = {
     middlewares: []
@@ -32,7 +33,7 @@ export const Middleware = (
                     this.reject = async function (ctx) {
                         const result = await rejectCopy(ctx)
                         if (result) {
-                            const nextResult = await data.next.reject(ctx)
+                            const nextResult = await SingletonService.loadClassInstance(data.next).reject(ctx)
                             return nextResult
                         }
                         return result

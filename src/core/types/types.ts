@@ -76,7 +76,7 @@ export interface MiddlewareHandler {
 }
 
 export interface NextMiddleware {
-    next?: MiddlewareHandler
+    next?: MiddlewareHandlerConstructor
 }
 
 export interface Middlewares {
