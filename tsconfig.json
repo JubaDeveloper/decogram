@@ -5,18 +5,20 @@
       ]
   },
   "compilerOptions": {
-    "rootDir": "src",
+    "baseUrl": "./src",
     "outDir": "dist",
     "target": "esnext",
     "module": "node16",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "declaration": true,
+    "isolatedModules": true,
     "paths": {
-      "metagram@core/*": ["./src/core/*"]
+      "metagram@core/*": ["./core/*"]
     }
   },
   "include": [
-    "src"
+    "src",
+    "test"
   ]
 }
