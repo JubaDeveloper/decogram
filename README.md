@@ -16,6 +16,7 @@ Metagram is a meta-based framework for building Telegram bots with **TypeScript*
   - [Project Structure](#project-structure)
   - [Obtaining Your Bot Token](#obtaining-your-bot-token)
   - [Running Your First Bot](#running-your-first-bot)
+  - [Initial setup using CLI](#create-initial-setup-with-cli)
 - [Core Concepts](#-core-concepts)
   - [@TelegramMaster](#telegrammaster)
   - [@Handler](#handler)
@@ -155,6 +156,15 @@ node dist/index.js
 ```
 
 ---
+
+### Create Initial Setup With CLI
+
+```bash
+  npx metagram new my-new-project
+```
+
+It'll create a new project with the initial setup for you
+in order to skip the manual installation process 
 
 ## 🧠 Core Concepts
 
