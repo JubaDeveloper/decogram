@@ -1,4 +1,4 @@
-type Constructor<T = any> = { new (...args: any[]): T }
+type Constructor<T = any> = new (...args: any[]) => T
 
 interface InstancePerArgs <T = any> {
   args: string
@@ -8,31 +8,33 @@ interface InstancePerArgs <T = any> {
 type InstanceCreatePredicate <T> = () => Promise<T>
 
 export class SingletonService {
-  private static instancesPerArg = new Set<InstancePerArgs>()
-  private static instances = new Set<Object>();
+	private static instancesPerArg = new Set<InstancePerArgs>()
+	private static instances = new Set<Object>();
 
-  public static loadClassInstance<T>(target: Constructor<T>): T {
-    for (const instance of this.instances) {
-      if (instance.constructor === target) return instance as T;
-    }
+	public static loadClassInstance<T>(target: Constructor<T>): T {
+		for (const instance of this.instances) {
+			if (instance.constructor === target) return instance as T;
+		}
 
-    const instance = new target();
-    this.instances.add(instance);
-    return instance;
-  }
+		const instance = new target();
 
-  public static async loadClassInstancePerArgsOrEvalPredicate <T = unknown> (
-    args: string,
-    predicate: InstanceCreatePredicate<T>
-  ): Promise<T>{
-    for (const instance of this.instancesPerArg) {
-      if (instance.args === args) return instance.instance as T;
-    }
+		this.instances.add(instance);
 
-    const instance = await predicate()
+		return instance;
+	}
 
-    this.instances.add(instance)
+	public static async loadClassInstancePerArgsOrEvalPredicate <T = unknown> (
+		args: string,
+		predicate: InstanceCreatePredicate<T>
+	): Promise<T>{
+		for (const instance of this.instancesPerArg) {
+			if (instance.args === args) return instance.instance as T;
+		}
 
-    return instance
-  }
+		const instance = await predicate()
+
+		this.instances.add(instance)
+
+		return instance
+	}
 }

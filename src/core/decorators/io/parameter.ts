@@ -5,16 +5,19 @@ import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey } from "../..
 const logger = LoggerFactory().getDefaultLogger()
 
 export const Message: ParameterDecorator = (target, proKey, paramIndex) => {
-    logger.trace(`[Message Decorator] target=${String(proKey)}, index=${paramIndex}`);
-    defineParamMetadata(target, proKey, paramIndex, messageMetaKey);
+	logger.trace(`[Message Decorator] target=${String(proKey)}, index=${paramIndex}`);
+
+	defineParamMetadata(target, proKey, paramIndex, messageMetaKey);
 };
 
 export const SendMessage: ParameterDecorator = (target, proKey, paramIndex) => {
-    logger.trace(`[SendMessage Decorator] target=${String(proKey)}, index=${paramIndex}`);
-    defineParamMetadata(target, proKey, paramIndex, sendMessageMetaKey);
+	logger.trace(`[SendMessage Decorator] target=${String(proKey)}, index=${paramIndex}`);
+
+	defineParamMetadata(target, proKey, paramIndex, sendMessageMetaKey);
 };
 
 export const Session: ParameterDecorator = (target, proKey, paramIndex) => {
-    logger.trace(`[Session Decorator] target=${String(proKey)}, index=${paramIndex}`);
-    defineParamMetadata(target, proKey, paramIndex, sessionContextMetaKey);
+	logger.trace(`[Session Decorator] target=${String(proKey)}, index=${paramIndex}`);
+
+	defineParamMetadata(target, proKey, paramIndex, sessionContextMetaKey);
 };

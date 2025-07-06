@@ -3,13 +3,15 @@ import { Context, NarrowedContext } from "telegraf";
 import { CallbackQuery, Message as TelegramMessage, Update } from "telegraf/types";
 
 // General Constructor
-export type Constructor<T = any> = { new (...args: any[]): T };
+export type Constructor<T = any> = new (...args: any[]) => T
 
 // Telegraf Context Types
 export type SendMessageMethod = Context["sendMessage"];
+
 export type MessageContext = TelegramMessage & { text: string };
 
 export type TgMessageContext = NarrowedContext<Context<Update>, Update.MessageUpdate<TelegramMessage>>;
+
 export type TgCallbackQueryContext = NarrowedContext<Context<Update>, Update.CallbackQueryUpdate<CallbackQuery & { data?: string }>>;
 
 // Predicate Function Type
