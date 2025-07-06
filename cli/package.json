@@ -1,0 +1,25 @@
+{
+  "name": "metagram-cli",
+  "version": "1.0.0",
+  "author": {
+    "name": "JubaDev michaelres1332@gmail.com"
+  },
+  "type": "commonjs",
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "description": "Cli for creating a new metagram project",
+  "license": "MIT",
+  "scripts": {
+    "build": "yarn tsc"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

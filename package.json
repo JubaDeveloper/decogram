@@ -1,7 +1,13 @@
 {
   "name": "metagram",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Meta-based Telegram Bot Programming",
+  "bin": {
+    "metagram": "cli/dist/index.js"
+  },
+  "workspaces": [
+    "cli"
+  ],
   "exports": {
     "./core/bootstrap": "./dist/core/bootstrap/bootstrap.js",
     "./core/decorators/io/class": "./dist/core/decorators/io/class.js",
