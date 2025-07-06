@@ -1,6 +1,6 @@
 {
   "name": "metagram",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "Meta-based Telegram Bot Programming",
   "bin": {
     "metagram": "cli/dist/index.js"
