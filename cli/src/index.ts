@@ -5,65 +5,75 @@ import path from "path";
 import { mkdirSync, writeFileSync } from "fs";
 
 const args = process.argv.slice(2);
+
 const command = args[0];
+
 const projectName = args[1];
 
 if (command === "new" && projectName) {
-  const projectPath = path.resolve(process.cwd(), projectName);
+	const projectPath = path.resolve(process.cwd(), projectName);
 
-  if (fs.existsSync(projectPath)) {
-    console.error(`❌ Folder "${projectName}" already exists.`);
-    process.exit(1);
-  }
+	if (fs.existsSync(projectPath)) {
+		console.error(`❌ Folder "${projectName}" already exists.`);
 
-  console.log(`🚀 Creating a new Metagram bot in ${projectName}...`);
+		process.exit(1);
+	}
 
-  // Step 1: Create folders
-  mkdirSync(projectPath, { recursive: true });
-  mkdirSync(path.join(projectPath, "src/handlers/message"), { recursive: true });
-  mkdirSync(path.join(projectPath, "src/handlers/callback"), { recursive: true });
-  mkdirSync(path.join(projectPath, "src/handlers/error"), { recursive: true });
-  mkdirSync(path.join(projectPath, "src/middleware"), { recursive: true });
-  mkdirSync(path.join(projectPath, "src/services"), { recursive: true });
+	console.log(`🚀 Creating a new Metagram bot in ${projectName}...`);
 
-  // Step 2: Write main.ts
-  writeFileSync(path.join(projectPath, "src/main.ts"), getMainContent());
+	// Step 1: Create folders
+	mkdirSync(projectPath, { recursive: true });
+
+	mkdirSync(path.join(projectPath, "src/handlers/message"), { recursive: true });
+
+	mkdirSync(path.join(projectPath, "src/handlers/callback"), { recursive: true });
+
+	mkdirSync(path.join(projectPath, "src/handlers/error"), { recursive: true });
+
+	mkdirSync(path.join(projectPath, "src/middleware"), { recursive: true });
+
+	mkdirSync(path.join(projectPath, "src/services"), { recursive: true });
+
+	// Step 2: Write main.ts
+	writeFileSync(path.join(projectPath, "src/main.ts"), getMainContent());
   
-  // Step 3: Write Message sample handler
-  writeFileSync(path.join(projectPath, "src/handlers/message/start.handler.ts"), getMessageHandlerContent());
+	// Step 3: Write Message sample handler
+	writeFileSync(path.join(projectPath, "src/handlers/message/start.handler.ts"), getMessageHandlerContent());
 
-  writeFileSync(path.join(projectPath, "src/handlers/callback/start.handler.ts"), getCallbackHandlerContent());
+	writeFileSync(path.join(projectPath, "src/handlers/callback/start.handler.ts"), getCallbackHandlerContent());
 
-  writeFileSync(path.join(projectPath, "src/handlers/error/global.handler.ts"), getErrorHandlerContent());
+	writeFileSync(path.join(projectPath, "src/handlers/error/global.handler.ts"), getErrorHandlerContent());
 
-  writeFileSync(path.join(projectPath, "src/middleware/foo.middleware.ts"), getMiddlewareContent());
+	writeFileSync(path.join(projectPath, "src/middleware/foo.middleware.ts"), getMiddlewareContent());
 
 
-  writeFileSync(path.join(projectPath, "src/services/hello.service.ts"), getHelloServiceContent());
+	writeFileSync(path.join(projectPath, "src/services/hello.service.ts"), getHelloServiceContent());
 
-  // Step 5: Write package.json
-  writeFileSync(path.join(projectPath, "package.json"), getPackageJson(projectName));
+	// Step 5: Write package.json
+	writeFileSync(path.join(projectPath, "package.json"), getPackageJson(projectName));
 
-  // Step 6: Write tsconfig.json
-  writeFileSync(path.join(projectPath, "tsconfig.json"), getTsConfig());
+	// Step 6: Write tsconfig.json
+	writeFileSync(path.join(projectPath, "tsconfig.json"), getTsConfig());
 
-  // Step 7: Writting .env config file
-  writeFileSync(path.join(projectPath, ".env"), getEnvConfig());
+	// Step 7: Writting .env config file
+	writeFileSync(path.join(projectPath, ".env"), getEnvConfig());
 
-  // Step 7: Install dependencies
-  console.log("📦 Installing dependencies...");
-  execSync("npm install metagram reflect-metadata telegraf", { stdio: "inherit", cwd: projectPath });
+	// Step 7: Install dependencies
+	console.log("📦 Installing dependencies...");
 
-  console.log(`✅ Project ${projectName} created successfully.`);
+	execSync("npm install metagram reflect-metadata telegraf", { stdio: "inherit", cwd: projectPath });
+
+	console.log(`✅ Project ${projectName} created successfully.`);
 } else {
-  console.log("Usage:");
-  console.log("  npx metagram new <project-name>");
+	console.log("Usage:");
+
+	console.log("  npx metagram new <project-name>");
 }
 
 // ------------------- Helpers ------------------------
 
 function getMainContent() {
-  return `import { StartCallbackHandler } from "@handlers/callback/start.handler";
+	return `import { StartCallbackHandler } from "@handlers/callback/start.handler";
 import { StartMessageHandler } from "@handlers/message/start.handler";
 import { bootstrap } from "metagram/core/bootstrap";
 import { TelegramMaster } from "metagram/core/decorators/io/class";
@@ -88,7 +98,7 @@ bootstrap(Master)`;
 }
 
 function getMessageHandlerContent() {
-  return `import { onError } from "@handlers/error/global.handler";
+	return `import { onError } from "@handlers/error/global.handler";
 import { HelloService } from "@services/hello.service";
 import { Handler } from "metagram/core/decorators/io/class";
 import { ClassErrorHandler } from "metagram/core/decorators/io/error";
@@ -135,7 +145,7 @@ export class StartMessageHandler {
 }
 
 function getCallbackHandlerContent() {
-  return `import { Handler } from "metagram/core/decorators/io/class";
+	return `import { Handler } from "metagram/core/decorators/io/class";
 import { ClassErrorHandler } from "metagram/core/decorators/io/error";
 import { SendMessageMethod } from "metagram/core/types";
 import { SendMessage } from "metagram/core/decorators/io/parameter";
@@ -172,7 +182,7 @@ export class StartCallbackHandler {
 }
 
 function getHelloServiceContent () {
-  return `import { Service } from "metagram/core/decorators/iot/service";
+	return `import { Service } from "metagram/core/decorators/iot/service";
 
 @Service
 export class HelloService {
@@ -184,7 +194,7 @@ export class HelloService {
 }
 
 function getErrorHandlerContent() {
-  return `import { ErrorHandler } from "metagram/core/types";
+	return `import { ErrorHandler } from "metagram/core/types";
 import { Context } from "telegraf";
 
 export const onError: ErrorHandler = (ctx: Context, error: any) => {
@@ -195,7 +205,7 @@ export const onError: ErrorHandler = (ctx: Context, error: any) => {
 }
 
 function getMiddlewareContent () {
-  return `
+	return `
 import { Middleware } from "metagram/core/decorators/io/class";
 import { MiddlewareHandler } from "metagram/core/types";
 import { Context } from "telegraf";
@@ -212,61 +222,61 @@ export class FooMiddleware implements MiddlewareHandler {
 }
 
 function getPackageJson(name: string) {
-  return JSON.stringify(
-    {
-      "name": name,
-      "version": "1.0.0",
-      "main": "src/main.ts",
-      "license": "MIT",
-      "scripts": {
-        "dev": "ts-node src/main.ts",
-        "build": "tsc"
-      },
-      "dependencies": {},
-      "devDependencies": {
-        "@types/node": "^24.0.10",
-        "ts-node": "^10.0.0",
-        "tsconfig-paths": "^4.2.0",
-        "typescript": "^5.8.3"
-      }
-    },
-    null,
-    2
-  );
+	return JSON.stringify(
+		{
+			"name": name,
+			"version": "1.0.0",
+			"main": "src/main.ts",
+			"license": "MIT",
+			"scripts": {
+				"dev": "ts-node src/main.ts",
+				"build": "tsc"
+			},
+			"dependencies": {},
+			"devDependencies": {
+				"@types/node": "^24.0.10",
+				"ts-node": "^10.0.0",
+				"tsconfig-paths": "^4.2.0",
+				"typescript": "^5.8.3"
+			}
+		},
+		null,
+		2
+	);
 }
 
 function getTsConfig() {
-  return JSON.stringify(
-    {
-      "ts-node": {
-        // Do not forget to `npm i -D tsconfig-paths`
-        "require": ["tsconfig-paths/register"]
-      },
-      "compilerOptions": {
-        "outDir": "dist",
-        "target": "esnext",
-        "module": "node16",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "strict": true,
-        "esModuleInterop": true,
-        "skipLibCheck": true,
-        "baseUrl": ".",
-        "paths": {
-          "@handlers/*": ["./src/handlers/*"],
-          "@services/*": ["./src/services/*"]
-        }
-      },
-      "include": [
-        "src"
-      ]
-    },
-    null,
-    2
-  );
+	return JSON.stringify(
+		{
+			"ts-node": {
+				// Do not forget to `npm i -D tsconfig-paths`
+				"require": ["tsconfig-paths/register"]
+			},
+			"compilerOptions": {
+				"outDir": "dist",
+				"target": "esnext",
+				"module": "node16",
+				"experimentalDecorators": true,
+				"emitDecoratorMetadata": true,
+				"strict": true,
+				"esModuleInterop": true,
+				"skipLibCheck": true,
+				"baseUrl": ".",
+				"paths": {
+					"@handlers/*": ["./src/handlers/*"],
+					"@services/*": ["./src/services/*"]
+				}
+			},
+			"include": [
+				"src"
+			]
+		},
+		null,
+		2
+	);
 }
 
 function getEnvConfig () {
-  return `BOT_TOKEN="YOUR_BOT_TOKEN_HERE"
+	return `BOT_TOKEN="YOUR_BOT_TOKEN_HERE"
   `;
 }
