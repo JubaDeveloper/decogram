@@ -5,6 +5,7 @@
       ]
   },
   "compilerOptions": {
+    "rootDir": "src",
     "outDir": "dist",
     "target": "esnext",
     "module": "node16",
@@ -14,5 +15,8 @@
     "paths": {
       "metagram@core/*": ["./src/core/*"]
     }
-  }
+  },
+  "include": [
+    "src"
+  ]
 }
