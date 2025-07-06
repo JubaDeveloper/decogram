@@ -23,6 +23,7 @@ if (command === "new" && projectName) {
   mkdirSync(path.join(projectPath, "src/handlers/message"), { recursive: true });
   mkdirSync(path.join(projectPath, "src/handlers/callback"), { recursive: true });
   mkdirSync(path.join(projectPath, "src/handlers/error"), { recursive: true });
+  mkdirSync(path.join(projectPath, "src/middleware"), { recursive: true });
   mkdirSync(path.join(projectPath, "src/services"), { recursive: true });
 
   // Step 2: Write main.ts
@@ -34,6 +35,8 @@ if (command === "new" && projectName) {
   writeFileSync(path.join(projectPath, "src/handlers/callback/start.handler.ts"), getCallbackHandlerContent());
 
   writeFileSync(path.join(projectPath, "src/handlers/error/global.handler.ts"), getErrorHandlerContent());
+
+  writeFileSync(path.join(projectPath, "src/middleware/foo.middleware.ts"), getMiddlewareContent());
 
 
   writeFileSync(path.join(projectPath, "src/services/hello.service.ts"), getHelloServiceContent());
@@ -89,12 +92,15 @@ function getMessageHandlerContent() {
 import { HelloService } from "@services/hello.service";
 import { Handler } from "metagram/core/decorators/io/class";
 import { ClassErrorHandler } from "metagram/core/decorators/io/error";
-import { OnCommand } from "metagram/core/decorators/io/method";
+import { OnCommand, OnMessage } from "metagram/core/decorators/io/method";
 import { SendMessage } from "metagram/core/decorators/io/parameter";
 import { Autowired } from "metagram/core/decorators/iot/autowired";
 import { SendMessageMethod } from "metagram/core/types";
+import { FooMiddleware } from "src/middleware/foo.middleware";
 
-@Handler
+@Handler({
+    middlewares: [FooMiddleware]
+})
 @ClassErrorHandler(onError)
 export class StartMessageHandler {
     constructor (
@@ -118,6 +124,13 @@ export class StartMessageHandler {
             }
         })
     }
+
+    @OnMessage()
+    public notExecuteOnFooMessage (
+        @SendMessage sendMessage: SendMessageMethod
+    ) {
+        sendMessage("Executed! No foo detected.")
+    }
 }`;
 }
 
@@ -131,7 +144,7 @@ import { Autowired } from "metagram/core/decorators/iot/autowired";
 import { onError } from "@handlers/error/global.handler";
 import { HelloService } from "@services/hello.service";
 
-@Handler
+@Handler()
 @ClassErrorHandler(onError)
 export class StartCallbackHandler {
     constructor (
@@ -179,6 +192,23 @@ export const onError: ErrorHandler = (ctx: Context, error: any) => {
   ctx.reply("Oops! Something went wrong.");
 };
 `;
+}
+
+function getMiddlewareContent () {
+  return `
+import { Middleware } from "metagram/core/decorators/io/class";
+import { MiddlewareHandler } from "metagram/core/types";
+import { Context } from "telegraf";
+
+@Middleware()
+export class FooMiddleware implements MiddlewareHandler {
+    reject(ctx: Context): boolean | Promise<boolean> {
+        const text = (ctx.message as any).text
+
+        return String(text).toLowerCase().includes("foo")
+    }
+
+}`
 }
 
 function getPackageJson(name: string) {
