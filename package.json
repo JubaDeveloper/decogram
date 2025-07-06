@@ -32,7 +32,7 @@
   },
   "license": "MIT",
   "type": "commonjs",
-  "private": true,
+  "private": false,
   "author": {
     "name": "JubaDev michaelres1332@gmail.com"
   },
