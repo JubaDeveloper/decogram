@@ -5,7 +5,7 @@ import { LoggerFactory } from "metagram@core/logger/logger.factory";
 import { registerWebhookUpdateListenerStrategy } from "metagram@core/strategy/webhook";
 import { Logger } from "pino";
 import { TgMessageContext, TgCallbackQueryContext, SessionContextWithChildren, ISessionContext, Constructor, ContextPredicate, WebhookFetchStrategy, PollingFetchStrategy, MiddlewareHandlerConstructor, IMountArgs, LoadListeners } from "metagram@core/types/types";
-import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, classErrorHandlerKey, methodErrorHandlerKey, onMessageMetaKey, onCallbackMetaKey, handlerMiddlewaresKeySymbol } from "metagram@core/metadata/keys";
+import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, classErrorHandlerKey, methodErrorHandlerKey, onMessageMetaKey, onCallbackMetaKey, handlerMiddlewaresKeySymbol, nextMiddlewareKeySymbol } from "metagram@core/metadata/keys";
 import { SingletonService } from "metagram@core/singleton/singleton";
 
 let logger = LoggerFactory().getDefaultLogger()
@@ -147,7 +147,20 @@ const skipExecutionOnAllMiddlewareReject = async (
     for (const middleware of middlewares) {
         const args = mountArgs({ listener: middleware, ctx, sessionContexts });
         const shouldReject = (args ? new middleware(...args) : SingletonService.loadClassInstance(middleware)).reject(ctx)
-        if (shouldReject) return true
+        if (shouldReject) {
+            const nextMiddleware: MiddlewareHandlerConstructor | undefined = Reflect.getMetadata(
+                nextMiddlewareKeySymbol,
+                middleware
+            )
+            if (nextMiddleware) {
+                return await skipExecutionOnAllMiddlewareReject(
+                    ctx,
+                    [nextMiddleware],
+                    sessionContexts
+                )
+            }
+            return true
+        }
     }
 
     return false

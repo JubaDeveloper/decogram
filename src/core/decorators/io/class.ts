@@ -3,8 +3,7 @@ import { Constructor, SessionContextConstructor, Master, MiddlewareHandler, Next
 import { LoggerFactory } from "../../logger/logger.factory";
 import { Service } from "../iot/service";
 import { registerBotAndBootstrap } from "metagram@core/engine/listener.engine";
-import { handlerMiddlewaresKeySymbol } from "metagram@core/metadata/keys";
-import { SingletonService } from "metagram@core/singleton/singleton";
+import { handlerMiddlewaresKeySymbol, nextMiddlewareKeySymbol } from "metagram@core/metadata/keys";
 
 export const Handler = (data: HandlerData = {
     middlewares: []
@@ -64,24 +63,12 @@ export const Middleware = (
     data?: NextMiddleware
 ) => {
     return <T extends Constructor<MiddlewareHandler>> (target: T) => {
-        return Service(class extends target {
-            nextMiddleware: MiddlewareHandler;
-
-            constructor(...args: any[]) {
-                super(...args)
-                if (data?.next) {
-                    const rejectCopy = this.reject 
-                    this.reject = async function (ctx) {
-                        const result = await rejectCopy(ctx)
-                        if (result) {
-                            const nextResult = await SingletonService.loadClassInstance(data.next).reject(ctx)
-                            return nextResult
-                        }
-                        return result
-                    }
-                }
-            }
-        })
+        if (data?.next) Reflect.defineMetadata(
+            nextMiddlewareKeySymbol,
+            data.next,
+            target
+        )
+        return Service(target)
     }
 }
 
