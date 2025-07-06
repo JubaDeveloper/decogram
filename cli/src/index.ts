@@ -111,11 +111,12 @@ function getMessageHandlerContent() {
 import { HelloService } from "@services/hello.service";
 import { Handler } from "metagram/core/decorators/io/class";
 import { ClassErrorHandler } from "metagram/core/decorators/io/error";
-import { OnCommand, OnMessage } from "metagram/core/decorators/io/method";
-import { SendMessage } from "metagram/core/decorators/io/parameter";
+import { OnCommand } from "metagram/core/decorators/io/method";
+import { SendMessage, Session } from "metagram/core/decorators/io/parameter";
 import { Autowired } from "metagram/core/decorators/iot/autowired";
 import { SendMessageMethod } from "metagram/core/types";
 import { FooMiddleware } from "src/middleware/foo.middleware";
+import { UserSessionContext } from "src/sessions/user.session.context";
 
 @Handler({
     middlewares: [FooMiddleware]
@@ -123,14 +124,17 @@ import { FooMiddleware } from "src/middleware/foo.middleware";
 @ClassErrorHandler(onError)
 export class StartMessageHandler {
     constructor (
-        @Autowired private readonly helloService: HelloService
+        @Autowired private readonly helloService: HelloService,
+        @Session private readonly userSession: UserSessionContext
     ) {}
 
     @OnCommand("/start")
     public onMessage (
         @SendMessage sendMessage: SendMessageMethod
     ) {
-        sendMessage(this.helloService.getHelloMessage(), {
+        sendMessage(this.helloService.getHelloMessage(
+            this.userSession.getFirstName()
+        ), {
             reply_markup: {
                 inline_keyboard: [
                     [
@@ -143,13 +147,6 @@ export class StartMessageHandler {
             }
         })
     }
-
-    @OnMessage()
-    public notExecuteOnFooMessage (
-        @SendMessage sendMessage: SendMessageMethod
-    ) {
-        sendMessage("Executed! No foo detected.")
-    }
 }`;
 }
 
@@ -157,24 +154,28 @@ function getCallbackHandlerContent() {
 	return `import { Handler } from "metagram/core/decorators/io/class";
 import { ClassErrorHandler } from "metagram/core/decorators/io/error";
 import { SendMessageMethod } from "metagram/core/types";
-import { SendMessage } from "metagram/core/decorators/io/parameter";
+import { SendMessage, Session } from "metagram/core/decorators/io/parameter";
 import { OnClick } from "metagram/core/decorators/io/method";
 import { Autowired } from "metagram/core/decorators/iot/autowired";
 import { onError } from "@handlers/error/global.handler";
 import { HelloService } from "@services/hello.service";
+import { UserSessionContext } from "src/sessions/user.session.context";
 
 @Handler()
 @ClassErrorHandler(onError)
 export class StartCallbackHandler {
     constructor (
-        @Autowired private readonly helloService: HelloService
+        @Autowired private readonly helloService: HelloService,
+        @Session private readonly userSession: UserSessionContext
     ) {}
 
     @OnClick("start")
     public onMessage (
         @SendMessage sendMessage: SendMessageMethod
     ) {
-        sendMessage(this.helloService.getHelloMessage(), {
+        sendMessage(this.helloService.getHelloMessage(
+            this.userSession.getFirstName()
+        ), {
             reply_markup: {
                 inline_keyboard: [
                     [
@@ -195,8 +196,8 @@ function getHelloServiceContent () {
 
 @Service
 export class HelloService {
-    getHelloMessage () {
-        return "Hello from metagram!"
+    getHelloMessage (name: string) {
+        return \`Hello from metagram to \${name}\`
     }
 }
 `;
