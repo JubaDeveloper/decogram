@@ -17,7 +17,9 @@ A modular, decorator-driven Node.js framework for building clean, scalable, and 
 ## 📁 Folder Structure
 
 ```
+cli/                           # The metagram CLI for creating a new project
 src/
+|-- cli/
 ├── core/
 │   ├── bootstrap/             # Bootstraps the app
 │   ├── decorators/
@@ -29,9 +31,6 @@ src/
 │   │   └── engine/            # Message listener execution logic
 │   ├── logger/                # Centralized logger factory
 │   └── types/                 # Shared types/interfaces
-├── errors/                    # Centralized error handlers
-├── features/                  # Your feature modules (handlers, sessions, etc.)
-└── index.ts                   # Entry point for exports
 ```
 
 ---
