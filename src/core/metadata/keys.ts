@@ -10,3 +10,5 @@ export const classErrorHandlerKey = Symbol("class:error_handler");
 export const methodErrorHandlerKey = Symbol("method:error_handler");
 
 export const autoWireMetaKeySymbol = Symbol("autowire");
+
+export const handlerMiddlewaresKeySymbol = Symbol("middlewares")

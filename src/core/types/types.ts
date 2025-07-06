@@ -55,7 +55,7 @@ export interface WebhookFetchStrategy {
 }
 
 // TelegramMaster Bootstrapping Input
-export interface Master {
+export interface Master extends Middlewares {
     updatedFetchStrategy: WebhookFetchStrategy | PollingFetchStrategy;
     messageListeners?: Constructor[];
     callbackQueryListeners?: Constructor[];
@@ -70,3 +70,19 @@ export interface DefineListenerMetadata {
 }
 
 export type SessionContextConstructor = Constructor<ISessionContext>
+
+export interface MiddlewareHandler {
+    reject (ctx: Context): boolean | Promise<boolean>
+}
+
+export interface NextMiddleware {
+    next?: MiddlewareHandler
+}
+
+export interface Middlewares {
+    middlewares?: Constructor<MiddlewareHandler>[]
+}
+
+export interface HandlerData extends Middlewares {}
+
+export type MiddlewareHandlerConstructor = Constructor<MiddlewareHandler>
