@@ -64,7 +64,7 @@ export const Middleware = (
     data?: NextMiddleware
 ) => {
     return <T extends Constructor<MiddlewareHandler>> (target: T) => {
-        return class extends target {
+        return Service(class extends target {
             nextMiddleware: MiddlewareHandler;
 
             constructor(...args: any[]) {
@@ -81,7 +81,7 @@ export const Middleware = (
                     }
                 }
             }
-        }
+        })
     }
 }
 
@@ -97,7 +97,7 @@ export const TelegramMaster = ({
     middlewares = []
 }: Master) => {
     return <T extends Constructor>(target: T) => {
-        return class extends target {
+        return Service(class extends target {
             constructor(...args: any[]) {
                 super(...args);
                 const token = updatedFetchStrategy.data.botToken;
@@ -114,6 +114,6 @@ export const TelegramMaster = ({
                     botlogger
                 );
             }
-        };
+        })
     };
 };

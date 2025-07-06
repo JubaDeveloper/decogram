@@ -16,6 +16,9 @@
       "metagram@core/*": ["./src/core/*"]
     }
   },
+  "exclude": [
+    "src/index.ts"
+  ],
   "include": [
     "src"
   ]
