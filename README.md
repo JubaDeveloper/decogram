@@ -46,17 +46,6 @@ npm install metagram
 ### 2. Create a bot handler
 
 ```ts
-import {
-  Handler,
-  OnMessage,
-  Message,
-  SendMessage,
-  TelegramMaster,
-  bootstrap
-} from "metagram/core";
-
-import { MessageContext, SendMessageMethod } from "metagram/core/types";
-
 @Handler
 class EchoHandler {
   @OnMessage()
