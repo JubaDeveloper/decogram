@@ -19,3 +19,5 @@ export const autoWireMetaKeySymbol = Symbol("autowire");
 export const handlerMiddlewaresKeySymbol = Symbol("middlewares")
 
 export const nextMiddlewareKeySymbol = Symbol("middleware:next")
+
+export const serviceMetaKeySymbol = Symbol("service")
