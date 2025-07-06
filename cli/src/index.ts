@@ -34,6 +34,8 @@ if (command === "new" && projectName) {
 
 	mkdirSync(path.join(projectPath, "src/services"), { recursive: true });
 
+	mkdirSync(path.join(projectPath, "src/sessions"), { recursive: true });
+
 	// Step 2: Write main.ts
 	writeFileSync(path.join(projectPath, "src/main.ts"), getMainContent());
   
@@ -46,8 +48,9 @@ if (command === "new" && projectName) {
 
 	writeFileSync(path.join(projectPath, "src/middleware/foo.middleware.ts"), getMiddlewareContent());
 
-
 	writeFileSync(path.join(projectPath, "src/services/hello.service.ts"), getHelloServiceContent());
+
+	writeFileSync(path.join(projectPath, "src/sessions/user.session.context.ts"), getUserSessionContext());
 
 	// Step 5: Write package.json
 	writeFileSync(path.join(projectPath, "package.json"), getPackageJson(projectName));
@@ -77,6 +80,7 @@ function getMainContent() {
 import { StartMessageHandler } from "@handlers/message/start.handler";
 import { bootstrap } from "metagram/core/bootstrap";
 import { TelegramMaster } from "metagram/core/decorators/io/class";
+import { UserSessionContext } from "src/sessions/user.session.context";
 
 @TelegramMaster({
     updatedFetchStrategy: {
@@ -90,6 +94,11 @@ import { TelegramMaster } from "metagram/core/decorators/io/class";
     ],
     callbackQueryListeners: [
         StartCallbackHandler
+    ],
+    sessionContexts: [
+        {
+            sessionContext: UserSessionContext
+        }
     ]
 })
 class Master {}
@@ -193,6 +202,26 @@ export class HelloService {
 `;
 }
 
+function getUserSessionContext () {
+	return `import { SessionContext } from "metagram/core/decorators/io/class";
+import { ISessionContext } from "metagram/core/types";
+import { Context } from "telegraf";
+
+@SessionContext
+export class UserSessionContext implements ISessionContext {
+    private firstName!: string
+
+    loadContext(ctx: Context): void | Promise<void> {
+        this.firstName = ctx.from?.first_name ?? ctx.message?.from.first_name ?? ctx.callbackQuery?.from.first_name ?? "Guest"
+    }
+
+    public getFirstName () {
+        return this.firstName
+    }
+}
+`;
+}
+
 function getErrorHandlerContent() {
 	return `import { ErrorHandler } from "metagram/core/types";
 import { Context } from "telegraf";
@@ -207,16 +236,26 @@ export const onError: ErrorHandler = (ctx: Context, error: any) => {
 function getMiddlewareContent () {
 	return `
 import { Middleware } from "metagram/core/decorators/io/class";
-import { MiddlewareHandler } from "metagram/core/types";
+import { MiddlewareHandler, SendMessageMethod } from "metagram/core/types";
 import { Context } from "telegraf";
+import { SendMessage, Session } from "metagram/core/decorators/io/parameter";
+import { UserSessionContext } from "src/sessions/user.session.context";
 
 @Middleware()
 export class FooMiddleware implements MiddlewareHandler {
-    reject(ctx: Context): boolean | Promise<boolean> {
-        const text = (ctx.message as any).text
+	constructor (
+        @SendMessage private readonly sendMessage: SendMessageMethod,
+        @Session private readonly userSessionContext: UserSessionContext
+	) {}
+	reject(ctx: Context): boolean | Promise<boolean> {
+		const text = (ctx.message as any).text
 
-        return String(text).toLowerCase().includes("foo")
-    }
+		const reject = String(text).toLowerCase().includes("foo")
+
+		if (reject) this.sendMessage("I'll reject processing your request " + this.userSessionContext.getFirstName())
+
+		return reject
+	}
 
 }`
 }
