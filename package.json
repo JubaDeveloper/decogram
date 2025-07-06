@@ -1,6 +1,6 @@
 {
   "name": "metagram",
-  "version": "0.1.1",
+  "version": "0.1.3",
   "description": "Meta-based Telegram Bot Programming",
   "bin": {
     "metagram": "cli/dist/index.js"
@@ -8,6 +8,10 @@
   "workspaces": [
     "cli"
   ],
+  "repository": {
+    "url": "https://github.com/JubaDeveloper/metagram.git",
+    "type": "git"
+  },
   "exports": {
     "./core/bootstrap": "./dist/core/bootstrap/bootstrap.js",
     "./core/decorators/io/class": "./dist/core/decorators/io/class.js",
