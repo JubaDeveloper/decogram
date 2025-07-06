@@ -164,7 +164,7 @@ node dist/index.js
 ```
 
 It'll create a new project with the initial setup for you
-so you can skip the installation process 
+in order to skip the manual installation process 
 
 ## 🧠 Core Concepts
 
