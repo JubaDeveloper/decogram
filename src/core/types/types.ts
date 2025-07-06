@@ -1,3 +1,4 @@
+import { Logger } from "pino";
 import { Context, NarrowedContext } from "telegraf";
 import { CallbackQuery, Message as TelegramMessage, Update } from "telegraf/types";
 
@@ -86,3 +87,21 @@ export interface Middlewares {
 export interface HandlerData extends Middlewares {}
 
 export type MiddlewareHandlerConstructor = Constructor<MiddlewareHandler>
+
+export interface IMountArgs {
+   sessionContexts: ISessionContext[]
+    listener: Constructor
+    method?: string
+    ctx: Context
+}
+
+export interface LoadListeners {
+    globalErrorHandler?: ErrorHandler
+    methodErrorHandler?: ErrorHandler
+    listener: Constructor
+    method: string
+    args: any[]
+    ctx: Context
+    logger: Logger
+    sessionContexts: ISessionContext[]
+}

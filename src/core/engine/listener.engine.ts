@@ -2,11 +2,11 @@
 import "reflect-metadata";
 import { Context, Telegraf } from "telegraf";
 import { LoggerFactory } from "metagram@core/logger/logger.factory";
-import { SingletonService } from "metagram@core/singleton/singleton";
 import { registerWebhookUpdateListenerStrategy } from "metagram@core/strategy/webhook";
 import { Logger } from "pino";
-import { TgMessageContext, TgCallbackQueryContext, SessionContextWithChildren, ISessionContext, ErrorHandler, Constructor, ContextPredicate, WebhookFetchStrategy, PollingFetchStrategy, MiddlewareHandlerConstructor } from "metagram@core/types/types";
+import { TgMessageContext, TgCallbackQueryContext, SessionContextWithChildren, ISessionContext, Constructor, ContextPredicate, WebhookFetchStrategy, PollingFetchStrategy, MiddlewareHandlerConstructor, IMountArgs, LoadListeners } from "metagram@core/types/types";
 import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, classErrorHandlerKey, methodErrorHandlerKey, onMessageMetaKey, onCallbackMetaKey, handlerMiddlewaresKeySymbol } from "metagram@core/metadata/keys";
+import { SingletonService } from "metagram@core/singleton/singleton";
 
 let logger = LoggerFactory().getDefaultLogger()
 
@@ -58,17 +58,13 @@ const loadListenerAndExec = async ({
     method,
     args,
     ctx,
-    logger
-}: {
-    globalErrorHandler?: ErrorHandler;
-    methodErrorHandler?: ErrorHandler;
-    listener: Constructor;
-    method: string;
-    args: any[];
-    ctx: Context;
-    logger: Logger;
-}) => {
-    const instance = SingletonService.loadClassInstance(listener);
+    logger,
+    sessionContexts
+}: LoadListeners) => {
+    const instanceArgs = mountArgs({ listener, ctx, sessionContexts });
+
+    const instance = instanceArgs ? new listener(...instanceArgs) : SingletonService.loadClassInstance(listener);
+
     logger.trace(`[loadListenerAndExec] Calling ${listener.name}.${method} with ${args.length} args`);
     try {
         await instance[method](...args);
@@ -88,40 +84,37 @@ const loadListenerAndExec = async ({
     }
 };
 
-const mountArgs = ({ sessionContexts, listener, method, ctx }: {
-    sessionContexts: ISessionContext[];
-    listener: Constructor;
-    method: string;
-    ctx: Context;
-}): any[] => {
+const mountArgs = ({ sessionContexts, listener, method, ctx }: IMountArgs): any[] => {
     logger.trace(`[mountArgs] Mounting args for ${listener.name}.${method}`);
     const args: any[] = [];
 
-    const messageArgs = Reflect.getMetadata(messageMetaKey, listener.prototype, method);
-    const sendMessageArgs = Reflect.getMetadata(sendMessageMetaKey, listener.prototype, method);
-    const sessionContextArgs: undefined | number[] = Reflect.getMetadata(sessionContextMetaKey, listener.prototype, method);
-    const paramsTypes = Reflect.getMetadata("design:paramtypes", listener.prototype, method);
+    const prototypeOrCosntructor = method ? listener.prototype : listener
 
-    messageArgs?.forEach((i: number) => {
-        args[i] = ctx.message;
-        logger.debug(`[mountArgs] Injected message at index ${i}`);
-    });
+    const messageArgs: number[] = Reflect.getMetadata(messageMetaKey, prototypeOrCosntructor, method) ?? [];
+    const sendMessageArgs: number[] = Reflect.getMetadata(sendMessageMetaKey, prototypeOrCosntructor, method) ?? [];
+    const sessionContextArgs: number[] = Reflect.getMetadata(sessionContextMetaKey, prototypeOrCosntructor, method) ?? [];
+    const paramsTypes: any[] = Reflect.getMetadata("design:paramtypes", prototypeOrCosntructor, method) ?? [];
 
-    sendMessageArgs?.forEach((i: number) => {
+    for (const messageArg of messageArgs) {
+        args[messageArg] = ctx.message;
+        logger.debug(`[mountArgs] Injected message at index ${messageArg}`);
+    }
+
+    for (const sendMessageArg of sendMessageArgs) {
         ctx.sendMessage = ctx.sendMessage.bind(ctx);
-        args[i] = ctx.sendMessage;
-        logger.debug(`[mountArgs] Injected sendMessage at index ${i}`);
-    });
+        args[sendMessageArg] = ctx.sendMessage;
+        logger.debug(`[mountArgs] Injected sendMessage at index ${sendMessageArg}`);
+    }
 
-    sessionContextArgs?.forEach(i => {
-        const expected = paramsTypes[i];
+    for (const sessionContextArg of sessionContextArgs) {
+        const expected = paramsTypes[sessionContextArg];
         for (const session of sessionContexts) {
             if (session.constructor === expected) {
-                args[i] = session;
-                logger.debug(`[mountArgs] Injected sessionContext (${expected.name}) at index ${i}`);
+                args[sessionContextArg] = session;
+                logger.debug(`[mountArgs] Injected sessionContext (${expected.name}) at index ${sessionContextArg}`);
             }
-        }
-    });
+        } 
+    }
 
     logger.trace(`[mountArgs] Final args: ${JSON.stringify(args)}`);
     return args;
@@ -148,10 +141,12 @@ const skipMethodExecution = ({ listener, method, ctx }: {
 
 const skipExecutionOnAllMiddlewareReject = async (
     ctx: Context,
-    middlewares: MiddlewareHandlerConstructor[]
+    middlewares: MiddlewareHandlerConstructor[],
+    sessionContexts: ISessionContext[]
 ): Promise<boolean> => {
     for (const middleware of middlewares) {
-        const shouldReject = await SingletonService.loadClassInstance(middleware).reject(ctx)
+        const args = mountArgs({ listener: middleware, ctx, sessionContexts });
+        const shouldReject = (args ? new middleware(...args) : SingletonService.loadClassInstance(middleware)).reject(ctx)
         if (shouldReject) return true
     }
 
@@ -172,7 +167,8 @@ const evalListenersForContext = async (
     logger.info(`[skipExecutionOnAllMiddlewareReject] Evaluating middlewares for ${onEventMetaKey.toString()}`);
     const skipExecution = await skipExecutionOnAllMiddlewareReject(
         ctx,
-        middlewares
+        middlewares,
+        sessionContexts
     )
 
     if (skipExecution) {
@@ -190,7 +186,8 @@ const evalListenersForContext = async (
         logger.info(`[skipExecutionOnAllMiddlewareReject] Evaluating middlewares for handler ${listener.constructor.name}`);
         const skipExecution = await skipExecutionOnAllMiddlewareReject(
             ctx,
-            middlewaresPerHandler
+            middlewaresPerHandler,
+            sessionContexts
         )
 
         if (skipExecution) {
@@ -214,7 +211,8 @@ const evalListenersForContext = async (
                 args,
                 methodErrorHandler,
                 globalErrorHandler,
-                logger
+                logger,
+                sessionContexts
             });
         }
     }
