@@ -1,6 +1,6 @@
 {
   "name": "metagram",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Meta-based Telegram Bot Programming",
   "bin": {
     "metagram": "cli/dist/index.js"
@@ -36,7 +36,7 @@
   },
   "license": "MIT",
   "type": "commonjs",
-  "private": true,
+  "private": false,
   "author": {
     "name": "JubaDev michaelres1332@gmail.com"
   },
@@ -58,6 +58,7 @@
     "check-engines": "^1.6.0",
     "eslint": "^9.30.1",
     "nodemon": "^3.1.10",
+    "resolve-tspaths": "^0.8.23",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.3",
