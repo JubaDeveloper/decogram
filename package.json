@@ -43,6 +43,7 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
+    "@types/node": "^24.0.10",
     "check-engines": "^1.6.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
