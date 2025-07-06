@@ -6,8 +6,8 @@ Metagram is a meta-based framework for building Telegram bots with **TypeScript*
 
 ## 📚 Table of Contents
 
-- [Introduction](#introduction)
-- [Key Features](#key-features)
+- [Introduction](#-introduction)
+- [Key Features](#-key-features)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Project Setup](#project-setup)
@@ -16,7 +16,7 @@ Metagram is a meta-based framework for building Telegram bots with **TypeScript*
   - [Project Structure](#project-structure)
   - [Obtaining Your Bot Token](#obtaining-your-bot-token)
   - [Running Your First Bot](#running-your-first-bot)
-- [Core Concepts](#core-concepts)
+- [Core Concepts](#-core-concepts)
   - [@TelegramMaster](#telegrammaster)
   - [@Handler](#handler)
   - [Message Handlers](#message-handlers)
@@ -32,8 +32,8 @@ Metagram is a meta-based framework for building Telegram bots with **TypeScript*
   - [Error Handling](#error-handling)
   - [Logging](#logging)
   - [Update Fetching Strategies](#update-fetching-strategies)
-- [Basic Example](#basic-example-the-hello-bot)
-- [API Reference](#api-reference)
+- [Basic Example](#-basic-example-the-hello-bot)
+- [API Reference](#-api-reference)
 
 ---
 
@@ -56,7 +56,7 @@ Metagram is a modern and declarative framework for Telegram bot development in T
 
 ---
 
-## 🛠️ Getting Started
+## Getting Started
 
 ### Prerequisites
 
