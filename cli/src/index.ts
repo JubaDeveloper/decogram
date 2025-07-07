@@ -109,7 +109,7 @@ bootstrap(Master)`;
 function getMessageHandlerContent() {
 	return `import { onError } from "@handlers/error/global.handler";
 import { HelloService } from "@services/hello.service";
-import { Handler } from "metagram/core/decorators/io/class";
+import { MessageHandler } from "metagram/core/decorators/io/class";
 import { ClassErrorHandler } from "metagram/core/decorators/io/error";
 import { OnCommand } from "metagram/core/decorators/io/method";
 import { SendMessage, Session } from "metagram/core/decorators/io/parameter";
@@ -118,7 +118,7 @@ import { SendMessageMethod } from "metagram/core/types";
 import { FooMiddleware } from "src/middleware/foo.middleware";
 import { UserSessionContext } from "src/sessions/user.session.context";
 
-@Handler({
+@MessageHandler({
     middlewares: [FooMiddleware]
 })
 @ClassErrorHandler(onError)
@@ -151,7 +151,7 @@ export class StartMessageHandler {
 }
 
 function getCallbackHandlerContent() {
-	return `import { Handler } from "metagram/core/decorators/io/class";
+	return `import { CallbackHandler } from "metagram/core/decorators/io/class";
 import { ClassErrorHandler } from "metagram/core/decorators/io/error";
 import { SendMessageMethod } from "metagram/core/types";
 import { SendMessage, Session } from "metagram/core/decorators/io/parameter";
@@ -161,7 +161,7 @@ import { onError } from "@handlers/error/global.handler";
 import { HelloService } from "@services/hello.service";
 import { UserSessionContext } from "src/sessions/user.session.context";
 
-@Handler()
+@CallbackHandler()
 @ClassErrorHandler(onError)
 export class StartCallbackHandler {
     constructor (
