@@ -111,7 +111,7 @@ export const Middleware = (
 }
 
 export const SessionContext = <T extends SessionContextConstructor>(target: T) => {
-	return target;
+	return Service(target);
 };
 
 export const TelegramMaster = ({
