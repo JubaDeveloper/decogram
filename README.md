@@ -161,7 +161,7 @@ node dist/index.js
 ### Create Initial Setup With CLI
 
 ```bash
-  npx decogram new my-new-project
+  npx @decogram/framework new my-new-project
 ```
 
 It'll create a new project with the initial setup for you

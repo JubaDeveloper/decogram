@@ -1,7 +1,8 @@
 {
-  "name": "decogram",
-  "version": "0.0.1",
+  "name": "@decogram/framework",
+  "version": "0.0.2",
   "description": "Meta-based Telegram Bot Programming",
+  
   "bin": {
     "decogram": "cli/dist/index.js"
   },
