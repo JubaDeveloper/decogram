@@ -248,7 +248,7 @@ const evalListenersForContext = async (
 		for (const method of methods) {
 			const middlewaresPerMethod: MiddlewareHandlerConstructor[] = Reflect.getMetadata(
 				applyMetaKeySymbol,
-				listener,
+				listener.prototype,
 				method
 			) ?? []
 
