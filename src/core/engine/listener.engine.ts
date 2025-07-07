@@ -5,7 +5,7 @@ import { LoggerFactory } from "metagram@core/logger/logger.factory";
 import { registerWebhookUpdateListenerStrategy } from "metagram@core/strategy/webhook";
 import { Logger } from "pino";
 import { TgMessageContext, TgCallbackQueryContext, SessionContextWithChildren, ISessionContext, Constructor, ContextPredicate, WebhookFetchStrategy, PollingFetchStrategy, MiddlewareHandlerConstructor, IMountArgs, LoadListeners } from "metagram@core/types/types";
-import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, classErrorHandlerKey, methodErrorHandlerKey, onMessageMetaKey, onCallbackMetaKey, nextMiddlewareKeySymbol, applyMetaKeySymbol } from "metagram@core/metadata/keys";
+import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, onMessageMetaKey, onCallbackMetaKey, nextMiddlewareKeySymbol, applyMetaKeySymbol, errorHandlerMetaKey } from "metagram@core/metadata/keys";
 import { SingletonService } from "metagram@core/singleton/singleton";
 
 const logger = LoggerFactory().getDefaultLogger()
@@ -243,7 +243,7 @@ const evalListenersForContext = async (
 
 		const methods = Reflect.getMetadata(onEventMetaKey, listener.prototype) ?? [];
 
-		const globalErrorHandler = Reflect.getMetadata(classErrorHandlerKey, listener);
+		const globalErrorHandler = Reflect.getMetadata(errorHandlerMetaKey, listener);
 
 		for (const method of methods) {
 			const middlewaresPerMethod: MiddlewareHandlerConstructor[] = Reflect.getMetadata(
@@ -266,7 +266,7 @@ const evalListenersForContext = async (
 				continue
 			}
 
-			const methodErrorHandler = Reflect.getMetadata(methodErrorHandlerKey, listener.prototype, method);
+			const methodErrorHandler = Reflect.getMetadata(errorHandlerMetaKey, listener.prototype, method);
 
 			if (skipMethodExecution({ method, listener, ctx })) continue;
 

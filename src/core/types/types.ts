@@ -28,7 +28,7 @@ export interface SessionContextWithChildren {
 }
 
 // Error Handler Function Type
-export type ErrorHandler = (ctx: Context, error: unknown) => any;
+export type TErrorHandler = (ctx: Context, error: unknown) => any;
 
 // Bot Strategy Interfaces
 export interface BotTokenData {
@@ -96,8 +96,8 @@ export interface IMountArgs {
 }
 
 export interface LoadListeners {
-    globalErrorHandler?: ErrorHandler
-    methodErrorHandler?: ErrorHandler
+    globalErrorHandler?: TErrorHandler
+    methodErrorHandler?: TErrorHandler
     listener: Constructor
     method: string
     args: any[]

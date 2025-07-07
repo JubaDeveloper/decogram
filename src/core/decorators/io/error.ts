@@ -1,24 +1,18 @@
 import "reflect-metadata";
 import { LoggerFactory } from "../../logger/logger.factory";
-import { classErrorHandlerKey, methodErrorHandlerKey } from "../../metadata/keys";
-import { ErrorHandler, Constructor } from "../../types/types";
+import { errorHandlerMetaKey } from "../../metadata/keys";
+import { Constructor, TErrorHandler } from "../../types/types";
 
 const logger = LoggerFactory().getDefaultLogger()
 
-export const ClassErrorHandler = (handler: ErrorHandler) => {
-	logger.trace("[ClassErrorHandler Decorator]");
+export const ErrorHandler = (handler: TErrorHandler) => {
+	logger.trace("[ErrorHandler Decorator]");
 
-	return <T extends Constructor>(target: T) => {
-		Reflect.defineMetadata(classErrorHandlerKey, handler, target);
+	return <T extends Constructor | Object>(
+		target: T, 
+		propKey?: symbol | string,
+		_descriptor?: TypedPropertyDescriptor<unknown>
+	) => {
+		Reflect.defineMetadata(errorHandlerMetaKey, handler, target, propKey);
 	};
-};
-
-export const MethodErrorHandler = (handler: ErrorHandler): MethodDecorator => {
-	logger.trace("[MethodErrorHandler Decorator] Registering handler for method.");
-
-	return (target, propKey) => {
-		logger.debug(`[MethodErrorHandler] target=${String(propKey)} handler registered.`);
-
-		Reflect.defineMetadata(methodErrorHandlerKey, handler, target, propKey);
-	};
-};
+}

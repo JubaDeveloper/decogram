@@ -10,9 +10,7 @@ export const onMessageMetaKey = Symbol("onMessage");
 
 export const onCallbackMetaKey = Symbol("onCallbackQuery");
 
-export const classErrorHandlerKey = Symbol("class:error_handler");
-
-export const methodErrorHandlerKey = Symbol("method:error_handler");
+export const errorHandlerMetaKey = Symbol("error-handler")
 
 export const autoWireMetaKeySymbol = Symbol("autowire");
 
