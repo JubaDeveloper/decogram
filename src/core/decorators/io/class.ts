@@ -44,7 +44,7 @@ export const Apply = (
 	return <T extends Object | Constructor>(
 		target: T, 
 		propKey?: symbol | string, 
-		_descriptor?: TypedPropertyDescriptor<unknown>
+		_descriptor?: TypedPropertyDescriptor<any>
 	) => {
 		Reflect.defineMetadata(
 			applyMetaKeySymbol,
