@@ -109,19 +109,18 @@ bootstrap(Master)`;
 function getMessageHandlerContent() {
 	return `import { onError } from "@handlers/error/global.handler";
 import { HelloService } from "@services/hello.service";
-import { MessageHandler } from "metagram/core/decorators/io/class";
-import { ClassErrorHandler } from "metagram/core/decorators/io/error";
+import { Apply, MessageHandler } from "metagram/core/decorators/io/class";
+import { ErrorHandler } from "metagram/core/decorators/io/error";
 import { OnCommand } from "metagram/core/decorators/io/method";
 import { SendMessage, Session } from "metagram/core/decorators/io/parameter";
 import { Autowired } from "metagram/core/decorators/iot/autowired";
-import { SendMessageMethod } from "metagram/core/types";
+import { TSendMessage } from "metagram/core/types";
 import { FooMiddleware } from "src/middleware/foo.middleware";
 import { UserSessionContext } from "src/sessions/user.session.context";
 
-@MessageHandler({
-    middlewares: [FooMiddleware]
-})
-@ClassErrorHandler(onError)
+@Apply(FooMiddleware)
+@ErrorHandler(onError)
+@MessageHandler()
 export class StartMessageHandler {
     constructor (
         @Autowired private readonly helloService: HelloService,
@@ -130,7 +129,7 @@ export class StartMessageHandler {
 
     @OnCommand("/start")
     public onMessage (
-        @SendMessage sendMessage: SendMessageMethod
+        @SendMessage sendMessage: TSendMessage
     ) {
         sendMessage(this.helloService.getHelloMessage(
             this.userSession.getFirstName()
@@ -152,8 +151,8 @@ export class StartMessageHandler {
 
 function getCallbackHandlerContent() {
 	return `import { CallbackHandler } from "metagram/core/decorators/io/class";
-import { ClassErrorHandler } from "metagram/core/decorators/io/error";
-import { SendMessageMethod } from "metagram/core/types";
+import { ErrorHandler } from "metagram/core/decorators/io/error";
+import { TSendMessage } from "metagram/core/types";
 import { SendMessage, Session } from "metagram/core/decorators/io/parameter";
 import { OnClick } from "metagram/core/decorators/io/method";
 import { Autowired } from "metagram/core/decorators/iot/autowired";
@@ -162,7 +161,7 @@ import { HelloService } from "@services/hello.service";
 import { UserSessionContext } from "src/sessions/user.session.context";
 
 @CallbackHandler()
-@ClassErrorHandler(onError)
+@ErrorHandler(onError)
 export class StartCallbackHandler {
     constructor (
         @Autowired private readonly helloService: HelloService,
@@ -171,7 +170,7 @@ export class StartCallbackHandler {
 
     @OnClick("start")
     public onMessage (
-        @SendMessage sendMessage: SendMessageMethod
+        @SendMessage sendMessage: TSendMessage
     ) {
         sendMessage(this.helloService.getHelloMessage(
             this.userSession.getFirstName()
@@ -224,12 +223,13 @@ export class UserSessionContext implements ISessionContext {
 }
 
 function getErrorHandlerContent() {
-	return `import { ErrorHandler } from "metagram/core/types";
+	return `import { TErrorHandler } from "metagram/core/types";
 import { Context } from "telegraf";
 
-export const onError: ErrorHandler = (ctx: Context, error: any) => {
-  console.error("❌ Error caught in handler:", error);
-  ctx.reply("Oops! Something went wrong.");
+export const onError: TErrorHandler = (ctx: Context, error: any) => {
+	console.error("❌ Error caught in handler:", error);
+
+	ctx.reply("Oops! Something went wrong.");
 };
 `;
 }
@@ -237,7 +237,7 @@ export const onError: ErrorHandler = (ctx: Context, error: any) => {
 function getMiddlewareContent () {
 	return `
 import { Middleware } from "metagram/core/decorators/io/class";
-import { MiddlewareHandler, SendMessageMethod } from "metagram/core/types";
+import { MiddlewareHandler, TSendMessage } from "metagram/core/types";
 import { Context } from "telegraf";
 import { SendMessage, Session } from "metagram/core/decorators/io/parameter";
 import { UserSessionContext } from "src/sessions/user.session.context";
@@ -245,7 +245,7 @@ import { UserSessionContext } from "src/sessions/user.session.context";
 @Middleware()
 export class FooMiddleware implements MiddlewareHandler {
 	constructor (
-        @SendMessage private readonly sendMessage: SendMessageMethod,
+        @SendMessage private readonly sendMessage: TSendMessage,
         @Session private readonly userSessionContext: UserSessionContext
 	) {}
 	reject(ctx: Context): boolean | Promise<boolean> {
