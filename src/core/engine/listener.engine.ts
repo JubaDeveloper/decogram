@@ -5,7 +5,7 @@ import { LoggerFactory } from "metagram@core/logger/logger.factory";
 import { registerWebhookUpdateListenerStrategy } from "metagram@core/strategy/webhook";
 import { Logger } from "pino";
 import { TgMessageContext, TgCallbackQueryContext, SessionContextWithChildren, ISessionContext, Constructor, ContextPredicate, WebhookFetchStrategy, PollingFetchStrategy, MiddlewareHandlerConstructor, IMountArgs, LoadListeners } from "metagram@core/types/types";
-import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, classErrorHandlerKey, methodErrorHandlerKey, onMessageMetaKey, onCallbackMetaKey, handlerMiddlewaresKeySymbol, nextMiddlewareKeySymbol } from "metagram@core/metadata/keys";
+import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, classErrorHandlerKey, methodErrorHandlerKey, onMessageMetaKey, onCallbackMetaKey, nextMiddlewareKeySymbol, applyMetaKeySymbol } from "metagram@core/metadata/keys";
 import { SingletonService } from "metagram@core/singleton/singleton";
 
 const logger = LoggerFactory().getDefaultLogger()
@@ -223,7 +223,7 @@ const evalListenersForContext = async (
 		logger.info(`[skipExecutionOnAllMiddlewareReject] Loading middlewares for handler ${listener.name}`);
 
 		const middlewaresPerHandler: MiddlewareHandlerConstructor[] = Reflect.getMetadata(
-			handlerMiddlewaresKeySymbol,
+			applyMetaKeySymbol,
 			listener
 		) ?? []
 
@@ -241,12 +241,31 @@ const evalListenersForContext = async (
 			continue
 		}
 
-
 		const methods = Reflect.getMetadata(onEventMetaKey, listener.prototype) ?? [];
 
 		const globalErrorHandler = Reflect.getMetadata(classErrorHandlerKey, listener);
 
 		for (const method of methods) {
+			const middlewaresPerMethod: MiddlewareHandlerConstructor[] = Reflect.getMetadata(
+				applyMetaKeySymbol,
+				listener,
+				method
+			) ?? []
+
+			logger.info(`[skipExecutionOnAllMiddlewareReject] Evaluating middlewares for method ${method}`);
+
+			const skipExecution = await skipExecutionOnAllMiddlewareReject(
+				ctx,
+				middlewaresPerMethod,
+				sessionContexts
+			)
+
+			if (skipExecution) {
+				logger.info(`[skipExecutionOnAllMiddlewareReject] Skipping execution for method ${method}`);
+
+				continue
+			}
+
 			const methodErrorHandler = Reflect.getMetadata(methodErrorHandlerKey, listener.prototype, method);
 
 			if (skipMethodExecution({ method, listener, ctx })) continue;

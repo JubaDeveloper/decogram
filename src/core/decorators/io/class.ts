@@ -1,45 +1,57 @@
 import "reflect-metadata";
-import { Constructor, SessionContextConstructor, Master, MiddlewareHandler, NextMiddleware, HandlerData } from "../../types/types";
+import { Constructor, SessionContextConstructor, Master, MiddlewareHandler, NextMiddleware, ApplyData } from "../../types/types";
 import { LoggerFactory } from "../../logger/logger.factory";
 import { Service } from "../iot/service";
 import { registerBotAndBootstrap } from "metagram@core/engine/listener.engine";
-import { handlerMiddlewaresKeySymbol, nextMiddlewareKeySymbol, onCallbackMetaKey, onMessageMetaKey } from "metagram@core/metadata/keys";
+import { applyMetaKeySymbol, nextMiddlewareKeySymbol, onCallbackMetaKey, onMessageMetaKey } from "metagram@core/metadata/keys";
 import { OnCallbackInMessageHandlerError, OnMessageInCallbackHandlerError } from "metagram@core/errors/errors";
 
-const Handler = (data: HandlerData) => {
+const Handler = () => {
 	return <T extends Constructor>(target: T): T => { 
-		Reflect.defineMetadata(
-			handlerMiddlewaresKeySymbol,
-			data.middlewares,
-			target
-		)
-
 		return Service(target)
 	}
 };
 
-export const MessageHandler = (data: HandlerData = {
-	middlewares: []
-}) => {
+export const MessageHandler = () => {
 	return <T extends Constructor>(target: T): T => { 
 		if (Reflect.getMetadataKeys(target.prototype).includes(onCallbackMetaKey)) {
 			throw OnCallbackInMessageHandlerError
 		}
 
-		return Handler(data)(target)
+		return Handler()(target)
 	}
 }
 
-export const CallbackHandler = (data: HandlerData = {
-	middlewares: []
-}) => {
+export const CallbackHandler = () => {
 	return <T extends Constructor>(target: T): T => { 
 
 		if (Reflect.getMetadataKeys(target.prototype).includes(onMessageMetaKey)) {
 			throw OnMessageInCallbackHandlerError
 		}
 
-		return Handler(data)(target)
+		return Handler()(target)
+	}
+}
+
+/**
+ * Used to apply a single or multi
+ * middlewares in the execution of
+ * a method or class
+ */
+export const Apply = (
+	middleware: ApplyData
+) => {
+	return <T extends Object | Constructor>(
+		target: T, 
+		propKey?: symbol | string, 
+		_descriptor?: TypedPropertyDescriptor<unknown>
+	) => {
+		Reflect.defineMetadata(
+			applyMetaKeySymbol,
+			Array.isArray(middleware) ? middleware : [middleware],
+			target,
+			propKey
+		)
 	}
 }
 

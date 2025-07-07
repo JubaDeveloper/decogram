@@ -6,7 +6,7 @@ import { CallbackQuery, Message as TelegramMessage, Update } from "telegraf/type
 export type Constructor<T = any> = new (...args: any[]) => T
 
 // Telegraf Context Types
-export type SendMessageMethod = Context["sendMessage"];
+export type TSendMessage = Context["sendMessage"];
 
 export type MessageContext = TelegramMessage & { text: string };
 
@@ -86,8 +86,6 @@ export interface Middlewares {
     middlewares?: Constructor<MiddlewareHandler>[]
 }
 
-export interface HandlerData extends Middlewares {}
-
 export type MiddlewareHandlerConstructor = Constructor<MiddlewareHandler>
 
 export interface IMountArgs {
@@ -107,3 +105,5 @@ export interface LoadListeners {
     logger: Logger
     sessionContexts: ISessionContext[]
 }
+
+export type ApplyData = MiddlewareHandlerConstructor | MiddlewareHandlerConstructor[]
