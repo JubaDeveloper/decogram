@@ -19,7 +19,8 @@ Metagram is a meta-based framework for building Telegram bots with **TypeScript*
   - [Initial setup using CLI](#create-initial-setup-with-cli)
 - [Core Concepts](#-core-concepts)
   - [@TelegramMaster](#telegrammaster)
-  - [@Handler](#handler)
+  - [@MessageHandler](#messagehandler)
+  - [@CallbackHandler](#callbackhandler)
   - [Message Handlers](#message-handlers)
   - [Callback Query Handlers](#callback-query-handlers)
   - [Context Predicates](#context-predicates)
@@ -186,16 +187,34 @@ Defines the bot's main configuration.
 class Master {}
 ```
 
-### @Handler
+### @MessageHandler
 
-Marks a class as a handler:
+Marks a class as a Handler of type MessageHandler:
 
 ```ts
-@Handler()
+@MessageHandler()
 export class HelloHandler {
-  constructor(@SendMessage private readonly send: SendMessageMethod) {}
+  constructor(@SendMessage private readonly send: TSendMessage) {}
 
   @OnCommand("/start")
+  start(@Message msg: Context["message"]) {
+    this.send("Hello, " + (msg?.from?.first_name ?? "Guest"));
+  }
+}
+```
+
+---
+
+### @CallbackHandler
+
+Marks a class as a Handler of type CallbackHandler:
+
+```ts
+@CallbackHandler()
+export class HelloHandler {
+  constructor(@SendMessage private readonly send: TSendMessage) {}
+
+  @OnClick("start")
   start(@Message msg: Context["message"]) {
     this.send("Hello, " + (msg?.from?.first_name ?? "Guest"));
   }
@@ -241,12 +260,12 @@ export class MyService {
   }
 }
 
-@Handler()
+@MessageHandler()
 export class SomeHandler {
   constructor(@Autowired private readonly svc: MyService) {}
 
   @OnCommand("/hi")
-  hi(@SendMessage send: SendMessageMethod) {
+  hi(@SendMessage send: TSendMessage) {
     send(this.svc.hello());
   }
 }
@@ -335,11 +354,11 @@ export class SettingsContext implements ISessionContext {
 ### Error Handling
 
 ```ts
-@ClassErrorHandler((ctx, err) => {
+@ErrorHandler((ctx, err) => {
   console.error("Error:", err);
   ctx.reply("Something went wrong.");
 })
-@Handler()
+@MessageHandler()
 export class SafeHandler {
   @OnCommand("/fail")
   fail() {
@@ -382,15 +401,15 @@ data: {
 
 ```ts
 import { bootstrap } from "metagram/core/bootstrap";
-import { Handler, TelegramMaster } from "metagram/core/decorators/io/class";
+import { CallbackHandler, TelegramMaster } from "metagram/core/decorators/io/class";
 import { OnCommand } from "metagram/core/decorators/io/method";
 import { SendMessage } from "metagram/core/decorators/io/parameter";
-import { SendMessageMethod } from "metagram/core/types";
+import { TSendMessage } from "metagram/core/types";
 import { Context } from "telegraf";
 
-@Handler()
+@MessageHandler()
 class HelloHandler {
-  constructor(@SendMessage private readonly send: SendMessageMethod) {}
+  constructor(@SendMessage private readonly send: TSendMessage) {}
 
   @OnCommand("/start")
   start(@Message msg: Context["message"]) {
@@ -429,9 +448,7 @@ bootstrap(Master);
 | `@Service`              | Class      | Declares a DI service                       |
 | `@Autowired`            | Parameter  | Injects a DI service                        |
 | `@Middleware`           | Class      | Declares middleware                         |
-| `@ClassErrorHandler`    | Class      | Class-level error handling                  |
-| `@MethodErrorHandler`   | Method     | Method-level error handling                 |
-| `@SessionContext`       | Class      | Declares a session context                  |
+| `@ErrorHandler`         | Class      | Class/Method-level error handling           |
 
 ---
 
