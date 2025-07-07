@@ -107,3 +107,9 @@ export interface LoadListeners {
 }
 
 export type ApplyData = MiddlewareHandlerConstructor | MiddlewareHandlerConstructor[]
+
+export type TContextType = "MESSAGE" | "CALLBACK" | "UNSET"
+
+type TypedContext<T extends TContextType> = T extends "MESSAGE" ? TgMessageContext : TgCallbackQueryContext
+
+export type TContext<T extends TContextType = "UNSET"> = TContextType extends "UNSET" ? Context : TypedContext<T> 

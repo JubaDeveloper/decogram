@@ -2,6 +2,8 @@ export const messageMetaKey = Symbol("message");
 
 export const sendMessageMetaKey = Symbol("sendMessage");
 
+export const contextMetaKeySymbol = Symbol("context")
+
 export const sessionContextMetaKey = Symbol("session-context");
 
 export const contextPredicateMetaKey = Symbol("contextPredicate");

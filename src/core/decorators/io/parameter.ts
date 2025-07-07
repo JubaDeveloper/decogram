@@ -1,9 +1,15 @@
 import "reflect-metadata";
 import { LoggerFactory } from "../../logger/logger.factory";
 import { defineParamMetadata } from "../../metadata/definers/defineParamMetadata";
-import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey } from "../../metadata/keys";
+import { contextMetaKeySymbol, messageMetaKey, sendMessageMetaKey, sessionContextMetaKey } from "../../metadata/keys";
 
 const logger = LoggerFactory().getDefaultLogger()
+
+export const Context: ParameterDecorator = (target, proKey, paramIndex) => {
+	logger.trace(`[Message Decorator] target=${String(proKey)}, index=${paramIndex}`);
+
+	defineParamMetadata(target, proKey, paramIndex, contextMetaKeySymbol);
+};
 
 export const Message: ParameterDecorator = (target, proKey, paramIndex) => {
 	logger.trace(`[Message Decorator] target=${String(proKey)}, index=${paramIndex}`);

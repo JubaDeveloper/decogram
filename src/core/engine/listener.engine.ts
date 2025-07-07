@@ -5,7 +5,7 @@ import { LoggerFactory } from "metagram@core/logger/logger.factory";
 import { registerWebhookUpdateListenerStrategy } from "metagram@core/strategy/webhook";
 import { Logger } from "pino";
 import { TgMessageContext, TgCallbackQueryContext, SessionContextWithChildren, ISessionContext, Constructor, ContextPredicate, WebhookFetchStrategy, PollingFetchStrategy, MiddlewareHandlerConstructor, IMountArgs, LoadListeners } from "metagram@core/types/types";
-import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, onMessageMetaKey, onCallbackMetaKey, nextMiddlewareKeySymbol, applyMetaKeySymbol, errorHandlerMetaKey } from "metagram@core/metadata/keys";
+import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, onMessageMetaKey, onCallbackMetaKey, nextMiddlewareKeySymbol, applyMetaKeySymbol, errorHandlerMetaKey, contextMetaKeySymbol } from "metagram@core/metadata/keys";
 import { SingletonService } from "metagram@core/singleton/singleton";
 
 const logger = LoggerFactory().getDefaultLogger()
@@ -103,6 +103,8 @@ const mountArgs = ({ sessionContexts, listener, method, ctx }: IMountArgs): any[
 
 	const messageArgs: number[] = Reflect.getMetadata(messageMetaKey, prototypeOrCosntructor, method) ?? [];
 
+	const contextArgs: number[] = Reflect.getMetadata(contextMetaKeySymbol, prototypeOrCosntructor, method) ?? [];
+
 	const sendMessageArgs: number[] = Reflect.getMetadata(sendMessageMetaKey, prototypeOrCosntructor, method) ?? [];
 
 	const sessionContextArgs: number[] = Reflect.getMetadata(sessionContextMetaKey, prototypeOrCosntructor, method) ?? [];
@@ -121,6 +123,12 @@ const mountArgs = ({ sessionContexts, listener, method, ctx }: IMountArgs): any[
 		args[sendMessageArg] = ctx.sendMessage;
 
 		logger.debug(`[mountArgs] Injected sendMessage at index ${sendMessageArg}`);
+	}
+
+	for (const contextArg of contextArgs) {
+		args[contextArg] = ctx;
+
+		logger.debug(`[mountArgs] Injected context at index ${contextArg}`);
 	}
 
 	for (const sessionContextArg of sessionContextArgs) {
