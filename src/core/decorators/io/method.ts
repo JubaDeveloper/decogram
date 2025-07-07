@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { defineMethodListenerMetadatas } from "../../metadata/definers/defineMethodListenerMetadata";
 import { onMessageMetaKey, onCallbackMetaKey } from "../../metadata/keys";
 import { ContextPredicate, TgMessageContext, TgCallbackQueryContext } from "../../types/types";

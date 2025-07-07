@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { LoggerFactory } from "../../logger/logger.factory";
 
 const logger = LoggerFactory().getDefaultLogger()

@@ -1,4 +1,3 @@
-import "reflect-metadata";
 import { Service } from "metagram@core/decorators/iot/service";
 import { SingletonService } from "metagram@core/singleton/singleton";
 import { Autowired } from "metagram@core/decorators/iot/autowired";

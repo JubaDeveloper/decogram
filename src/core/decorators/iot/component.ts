@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { autoWireMetaKeySymbol } from "../../metadata/keys";
 import { SingletonService } from "../../singleton/singleton";
 import { Constructor } from "../../types/types";

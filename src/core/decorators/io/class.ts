@@ -1,4 +1,4 @@
-
+import "reflect-metadata";
 import { Constructor, SessionContextConstructor, Master, MiddlewareHandler, NextMiddleware, HandlerData } from "../../types/types";
 import { LoggerFactory } from "../../logger/logger.factory";
 import { Service } from "../iot/service";

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { LoggerFactory } from "../../logger/logger.factory";
 import { classErrorHandlerKey, methodErrorHandlerKey } from "../../metadata/keys";
 import { ErrorHandler, Constructor } from "../../types/types";

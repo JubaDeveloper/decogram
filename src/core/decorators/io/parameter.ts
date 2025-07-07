@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { LoggerFactory } from "../../logger/logger.factory";
 import { defineParamMetadata } from "../../metadata/definers/defineParamMetadata";
 import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey } from "../../metadata/keys";

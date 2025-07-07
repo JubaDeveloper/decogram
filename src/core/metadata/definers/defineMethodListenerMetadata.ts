@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { LoggerFactory } from "../../logger/logger.factory";
 import { DefineListenerMetadata } from "../../types/types";
 import { contextPredicateMetaKey } from "../keys";

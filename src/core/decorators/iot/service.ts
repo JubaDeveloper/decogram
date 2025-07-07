@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { serviceMetaKeySymbol } from "metagram@core/metadata/keys";
 import { Constructor } from "../../types/types";
 import { Component } from "./component";
