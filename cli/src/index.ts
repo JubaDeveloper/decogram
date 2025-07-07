@@ -64,7 +64,7 @@ if (command === "new" && projectName) {
 	// Step 7: Install dependencies
 	console.log("📦 Installing dependencies...");
 
-	execSync("npm install metagram reflect-metadata telegraf", { stdio: "inherit", cwd: projectPath });
+	execSync("npm install metagram", { stdio: "inherit", cwd: projectPath });
 
 	console.log(`✅ Project ${projectName} created successfully.`);
 } else {
