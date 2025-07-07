@@ -81,7 +81,7 @@ npm init -y
 ### Installation
 
 ```bash
-npm install decogram telegraf express pino pino-pretty reflect-metadata
+npm install @decogram/framework telegraf express pino pino-pretty reflect-metadata
 npm install -D typescript @types/node resolve-tspaths
 ```
 
