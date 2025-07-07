@@ -1,15 +1,15 @@
 {
-  "name": "metagram",
-  "version": "0.1.21",
+  "name": "decogram",
+  "version": "0.0.1",
   "description": "Meta-based Telegram Bot Programming",
   "bin": {
-    "metagram": "cli/dist/index.js"
+    "decogram": "cli/dist/index.js"
   },
   "workspaces": [
     "cli"
   ],
   "repository": {
-    "url": "https://github.com/JubaDeveloper/metagram.git",
+    "url": "https://github.com/JubaDeveloper/decogram.git",
     "type": "git"
   },
   "exports": {

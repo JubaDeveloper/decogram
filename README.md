@@ -1,6 +1,6 @@
-# Metagram Framework
+# Decogram Framework
 
-Metagram is a meta-based framework for building Telegram bots with **TypeScript**. It’s designed to be **declarative**, **modular**, and **developer-friendly**, leveraging decorators, dependency injection, and Telegraf under the hood.
+Decogram is a meta-based framework for building Telegram bots with **TypeScript**. It’s designed to be **declarative**, **modular**, and **developer-friendly**, leveraging decorators, dependency injection, and Telegraf under the hood.
 
 ---
 
@@ -40,7 +40,7 @@ Metagram is a meta-based framework for building Telegram bots with **TypeScript*
 
 ## 📘 Introduction
 
-Metagram is a modern and declarative framework for Telegram bot development in TypeScript. It wraps around [Telegraf](https://telegraf.js.org/) and introduces decorators, dependency injection, and modular architecture to simplify and structure your bot logic.
+Decogram is a modern and declarative framework for Telegram bot development in TypeScript. It wraps around [Telegraf](https://telegraf.js.org/) and introduces decorators, dependency injection, and modular architecture to simplify and structure your bot logic.
 
 ---
 
@@ -70,8 +70,8 @@ Metagram is a modern and declarative framework for Telegram bot development in T
 ### Project Setup
 
 ```bash
-mkdir my-metagram-bot
-cd my-metagram-bot
+mkdir my-decogram-bot
+cd my-decogram-bot
 npm init -y
 ```
 
@@ -80,7 +80,7 @@ npm init -y
 ### Installation
 
 ```bash
-npm install metagram telegraf express pino pino-pretty reflect-metadata
+npm install decogram telegraf express pino pino-pretty reflect-metadata
 npm install -D typescript @types/node resolve-tspaths
 ```
 
@@ -118,7 +118,7 @@ npm install -D typescript @types/node resolve-tspaths
 ### Project Structure
 
 ```
-my-metagram-bot/
+my-decogram-bot/
 ├── src/
 │   ├── handlers/
 │   │   ├── message/
@@ -160,7 +160,7 @@ node dist/index.js
 ### Create Initial Setup With CLI
 
 ```bash
-  npx metagram new my-new-project
+  npx decogram new my-new-project
 ```
 
 It'll create a new project with the initial setup for you
@@ -354,7 +354,7 @@ Use `@MethodErrorHandler()` for method-specific errors.
 
 ### Logging
 
-Metagram uses **pino**. You can extend or replace loggers if needed. By default, all core events are logged.
+Decogram uses **pino**. You can extend or replace loggers if needed. By default, all core events are logged.
 
 ---
 
@@ -381,11 +381,11 @@ data: {
 ## 📦 Basic Example: The Hello Bot
 
 ```ts
-import { bootstrap } from "metagram/core/bootstrap";
-import { Handler, TelegramMaster } from "metagram/core/decorators/io/class";
-import { OnCommand } from "metagram/core/decorators/io/method";
-import { SendMessage } from "metagram/core/decorators/io/parameter";
-import { SendMessageMethod } from "metagram/core/types";
+import { bootstrap } from "decogram/core/bootstrap";
+import { Handler, TelegramMaster } from "decogram/core/decorators/io/class";
+import { OnCommand } from "decogram/core/decorators/io/method";
+import { SendMessage } from "decogram/core/decorators/io/parameter";
+import { SendMessageMethod } from "decogram/core/types";
 import { Context } from "telegraf";
 
 @Handler()
@@ -435,5 +435,5 @@ bootstrap(Master);
 
 ---
 
-**Happy coding with Metagram!** 🚀  
+**Happy coding with Decogram!** 🚀  
 Want to contribute? Open a PR or star the project!

@@ -2,9 +2,9 @@ import "reflect-metadata";
 import { Constructor, SessionContextConstructor, Master, MiddlewareHandler, NextMiddleware, ApplyData } from "../../types/types";
 import { LoggerFactory } from "../../logger/logger.factory";
 import { Service } from "../iot/service";
-import { registerBotAndBootstrap } from "metagram@core/engine/listener.engine";
-import { applyMetaKeySymbol, nextMiddlewareKeySymbol, onCallbackMetaKey, onMessageMetaKey } from "metagram@core/metadata/keys";
-import { OnCallbackInMessageHandlerError, OnMessageInCallbackHandlerError } from "metagram@core/errors/errors";
+import { registerBotAndBootstrap } from "decogram@core/engine/listener.engine";
+import { applyMetaKeySymbol, nextMiddlewareKeySymbol, onCallbackMetaKey, onMessageMetaKey } from "decogram@core/metadata/keys";
+import { OnCallbackInMessageHandlerError, OnMessageInCallbackHandlerError } from "decogram@core/errors/errors";
 
 const Handler = () => {
 	return <T extends Constructor>(target: T): T => { 

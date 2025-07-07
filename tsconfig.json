@@ -14,7 +14,7 @@
     "declaration": true,
     "isolatedModules": true,
     "paths": {
-      "metagram@core/*": ["./core/*"]
+      "decogram@core/*": ["./core/*"]
     }
   },
   "include": [

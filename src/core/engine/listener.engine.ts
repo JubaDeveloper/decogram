@@ -1,12 +1,12 @@
 // FULL FILE — WITH COMPLETE LOGGING ENHANCEMENTS
 import "reflect-metadata";
 import { Context, Telegraf } from "telegraf";
-import { LoggerFactory } from "metagram@core/logger/logger.factory";
-import { registerWebhookUpdateListenerStrategy } from "metagram@core/strategy/webhook";
+import { LoggerFactory } from "decogram@core/logger/logger.factory";
+import { registerWebhookUpdateListenerStrategy } from "decogram@core/strategy/webhook";
 import { Logger } from "pino";
-import { TgMessageContext, TgCallbackQueryContext, SessionContextWithChildren, ISessionContext, Constructor, ContextPredicate, WebhookFetchStrategy, PollingFetchStrategy, MiddlewareHandlerConstructor, IMountArgs, LoadListeners } from "metagram@core/types/types";
-import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, onMessageMetaKey, onCallbackMetaKey, nextMiddlewareKeySymbol, applyMetaKeySymbol, errorHandlerMetaKey, contextMetaKeySymbol } from "metagram@core/metadata/keys";
-import { SingletonService } from "metagram@core/singleton/singleton";
+import { TgMessageContext, TgCallbackQueryContext, SessionContextWithChildren, ISessionContext, Constructor, ContextPredicate, WebhookFetchStrategy, PollingFetchStrategy, MiddlewareHandlerConstructor, IMountArgs, LoadListeners } from "decogram@core/types/types";
+import { messageMetaKey, sendMessageMetaKey, sessionContextMetaKey, contextPredicateMetaKey, onMessageMetaKey, onCallbackMetaKey, nextMiddlewareKeySymbol, applyMetaKeySymbol, errorHandlerMetaKey, contextMetaKeySymbol } from "decogram@core/metadata/keys";
+import { SingletonService } from "decogram@core/singleton/singleton";
 
 const logger = LoggerFactory().getDefaultLogger()
 

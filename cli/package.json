@@ -1,5 +1,5 @@
 {
-  "name": "metagram-cli",
+  "name": "decogram-cli",
   "version": "1.0.0",
   "author": {
     "name": "JubaDev michaelres1332@gmail.com"
@@ -12,7 +12,7 @@
   "engines": {
     "node": ">=20.0.0"
   },
-  "description": "Cli for creating a new metagram project",
+  "description": "Cli for creating a new decogram project",
   "license": "MIT",
   "scripts": {
     "build": "yarn tsc"

@@ -19,7 +19,7 @@ if (command === "new" && projectName) {
 		process.exit(1);
 	}
 
-	console.log(`🚀 Creating a new Metagram bot in ${projectName}...`);
+	console.log(`🚀 Creating a new Decogram bot in ${projectName}...`);
 
 	// Step 1: Create folders
 	mkdirSync(projectPath, { recursive: true });
@@ -64,13 +64,13 @@ if (command === "new" && projectName) {
 	// Step 7: Install dependencies
 	console.log("📦 Installing dependencies...");
 
-	execSync("npm install metagram", { stdio: "inherit", cwd: projectPath });
+	execSync("npm install decogram", { stdio: "inherit", cwd: projectPath });
 
 	console.log(`✅ Project ${projectName} created successfully.`);
 } else {
 	console.log("Usage:");
 
-	console.log("  npx metagram new <project-name>");
+	console.log("  npx decogram new <project-name>");
 }
 
 // ------------------- Helpers ------------------------
@@ -78,8 +78,8 @@ if (command === "new" && projectName) {
 function getMainContent() {
 	return `import { StartCallbackHandler } from "@handlers/callback/start.handler";
 import { StartMessageHandler } from "@handlers/message/start.handler";
-import { bootstrap } from "metagram/core/bootstrap";
-import { TelegramMaster } from "metagram/core/decorators/io/class";
+import { bootstrap } from "decogram/core/bootstrap";
+import { TelegramMaster } from "decogram/core/decorators/io/class";
 import { UserSessionContext } from "src/sessions/user.session.context";
 
 @TelegramMaster({
@@ -109,12 +109,12 @@ bootstrap(Master)`;
 function getMessageHandlerContent() {
 	return `import { onError } from "@handlers/error/global.handler";
 import { HelloService } from "@services/hello.service";
-import { Apply, MessageHandler } from "metagram/core/decorators/io/class";
-import { ErrorHandler } from "metagram/core/decorators/io/error";
-import { OnCommand } from "metagram/core/decorators/io/method";
-import { SendMessage, Session } from "metagram/core/decorators/io/parameter";
-import { Autowired } from "metagram/core/decorators/iot/autowired";
-import { TSendMessage } from "metagram/core/types";
+import { Apply, MessageHandler } from "decogram/core/decorators/io/class";
+import { ErrorHandler } from "decogram/core/decorators/io/error";
+import { OnCommand } from "decogram/core/decorators/io/method";
+import { SendMessage, Session } from "decogram/core/decorators/io/parameter";
+import { Autowired } from "decogram/core/decorators/iot/autowired";
+import { TSendMessage } from "decogram/core/types";
 import { FooMiddleware } from "src/middleware/foo.middleware";
 import { UserSessionContext } from "src/sessions/user.session.context";
 
@@ -150,12 +150,12 @@ export class StartMessageHandler {
 }
 
 function getCallbackHandlerContent() {
-	return `import { CallbackHandler } from "metagram/core/decorators/io/class";
-import { ErrorHandler } from "metagram/core/decorators/io/error";
-import { TSendMessage } from "metagram/core/types";
-import { SendMessage, Session } from "metagram/core/decorators/io/parameter";
-import { OnClick } from "metagram/core/decorators/io/method";
-import { Autowired } from "metagram/core/decorators/iot/autowired";
+	return `import { CallbackHandler } from "decogram/core/decorators/io/class";
+import { ErrorHandler } from "decogram/core/decorators/io/error";
+import { TSendMessage } from "decogram/core/types";
+import { SendMessage, Session } from "decogram/core/decorators/io/parameter";
+import { OnClick } from "decogram/core/decorators/io/method";
+import { Autowired } from "decogram/core/decorators/iot/autowired";
 import { onError } from "@handlers/error/global.handler";
 import { HelloService } from "@services/hello.service";
 import { UserSessionContext } from "src/sessions/user.session.context";
@@ -191,20 +191,20 @@ export class StartCallbackHandler {
 }
 
 function getHelloServiceContent () {
-	return `import { Service } from "metagram/core/decorators/iot/service";
+	return `import { Service } from "decogram/core/decorators/iot/service";
 
 @Service
 export class HelloService {
     getHelloMessage (name: string) {
-        return \`Hello from metagram to \${name}\`
+        return \`Hello from decogram to \${name}\`
     }
 }
 `;
 }
 
 function getUserSessionContext () {
-	return `import { SessionContext } from "metagram/core/decorators/io/class";
-import { ISessionContext } from "metagram/core/types";
+	return `import { SessionContext } from "decogram/core/decorators/io/class";
+import { ISessionContext } from "decogram/core/types";
 import { Context } from "telegraf";
 
 @SessionContext
@@ -223,7 +223,7 @@ export class UserSessionContext implements ISessionContext {
 }
 
 function getErrorHandlerContent() {
-	return `import { TErrorHandler } from "metagram/core/types";
+	return `import { TErrorHandler } from "decogram/core/types";
 import { Context } from "telegraf";
 
 export const onError: TErrorHandler = (ctx: Context, error: any) => {
@@ -236,10 +236,10 @@ export const onError: TErrorHandler = (ctx: Context, error: any) => {
 
 function getMiddlewareContent () {
 	return `
-import { Middleware } from "metagram/core/decorators/io/class";
-import { MiddlewareHandler, TSendMessage } from "metagram/core/types";
+import { Middleware } from "decogram/core/decorators/io/class";
+import { MiddlewareHandler, TSendMessage } from "decogram/core/types";
 import { Context } from "telegraf";
-import { SendMessage, Session } from "metagram/core/decorators/io/parameter";
+import { SendMessage, Session } from "decogram/core/decorators/io/parameter";
 import { UserSessionContext } from "src/sessions/user.session.context";
 
 @Middleware()

@@ -1,6 +1,6 @@
-import { CallbackHandler, MessageHandler } from "metagram@core/decorators/io/class"
-import { OnCallbackQuery, OnMessage } from "metagram@core/decorators/io/method"
-import { OnCallbackInMessageHandlerError, OnMessageInCallbackHandlerError } from "metagram@core/errors/errors"
+import { CallbackHandler, MessageHandler } from "decogram@core/decorators/io/class"
+import { OnCallbackQuery, OnMessage } from "decogram@core/decorators/io/method"
+import { OnCallbackInMessageHandlerError, OnMessageInCallbackHandlerError } from "decogram@core/errors/errors"
 
 describe("Handler", () => {
 	test("Should throw when OnMessage is registered in CallbackHandler", () => {

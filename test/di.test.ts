@@ -1,6 +1,6 @@
-import { Service } from "metagram@core/decorators/iot/service";
-import { SingletonService } from "metagram@core/singleton/singleton";
-import { Autowired } from "metagram@core/decorators/iot/autowired";
+import { Service } from "decogram@core/decorators/iot/service";
+import { SingletonService } from "decogram@core/singleton/singleton";
+import { Autowired } from "decogram@core/decorators/iot/autowired";
 
 describe("Dependency Injection", () => {
 	test("Should create one service and inject it and expect it to be available", () => {
