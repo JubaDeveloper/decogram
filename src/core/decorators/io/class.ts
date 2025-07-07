@@ -3,11 +3,10 @@ import { Constructor, SessionContextConstructor, Master, MiddlewareHandler, Next
 import { LoggerFactory } from "../../logger/logger.factory";
 import { Service } from "../iot/service";
 import { registerBotAndBootstrap } from "metagram@core/engine/listener.engine";
-import { handlerMiddlewaresKeySymbol, nextMiddlewareKeySymbol } from "metagram@core/metadata/keys";
+import { handlerMiddlewaresKeySymbol, nextMiddlewareKeySymbol, onCallbackMetaKey, onMessageMetaKey } from "metagram@core/metadata/keys";
+import { OnCallbackInMessageHandlerError, OnMessageInCallbackHandlerError } from "metagram@core/errors/errors";
 
-export const Handler = (data: HandlerData = {
-	middlewares: []
-}) => {
+const Handler = (data: HandlerData) => {
 	return <T extends Constructor>(target: T): T => { 
 		Reflect.defineMetadata(
 			handlerMiddlewaresKeySymbol,
@@ -18,6 +17,31 @@ export const Handler = (data: HandlerData = {
 		return Service(target)
 	}
 };
+
+export const MessageHandler = (data: HandlerData = {
+	middlewares: []
+}) => {
+	return <T extends Constructor>(target: T): T => { 
+		if (Reflect.getMetadataKeys(target.prototype).includes(onCallbackMetaKey)) {
+			throw OnCallbackInMessageHandlerError
+		}
+
+		return Handler(data)(target)
+	}
+}
+
+export const CallbackHandler = (data: HandlerData = {
+	middlewares: []
+}) => {
+	return <T extends Constructor>(target: T): T => { 
+
+		if (Reflect.getMetadataKeys(target.prototype).includes(onMessageMetaKey)) {
+			throw OnMessageInCallbackHandlerError
+		}
+
+		return Handler(data)(target)
+	}
+}
 
 /**
  * Middleware Decorator
