@@ -70,7 +70,7 @@ if (command === "new" && projectName) {
 } else {
 	console.log("Usage:");
 
-	console.log("  npx decogram new <project-name>");
+	console.log("  npx decogram@framework new <project-name>");
 }
 
 // ------------------- Helpers ------------------------
